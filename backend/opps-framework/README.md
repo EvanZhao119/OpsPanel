@@ -1,0 +1,1 @@
+Core infrastructure: security, AOP, exception handling

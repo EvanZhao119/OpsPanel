@@ -1,0 +1,1 @@
+Application entry point (Spring Boot main)
