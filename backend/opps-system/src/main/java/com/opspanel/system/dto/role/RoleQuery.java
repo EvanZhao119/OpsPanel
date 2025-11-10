@@ -2,10 +2,9 @@ package com.opspanel.system.dto.role;
 
 import lombok.Data;
 
+/** Query parameters for role search. */
 @Data
-/** Query filter for roles. */
 public class RoleQuery {
-    public String roleName;
-    public String roleCode;
-    public Integer status;
+    private String roleName;
+    private Integer status;
 }

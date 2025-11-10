@@ -3,10 +3,13 @@ package com.opspanel.system.dto.dept;
 import lombok.Data;
 
 /**
- * Command object for creating a department.
+ * Command object for updating a department.
  */
 @Data
-public class DeptCreateCmd {
+public class DeptUpdateCmd {
+
+    /** Department ID */
+    private Long deptId;
 
     /** Department name */
     private String deptName;

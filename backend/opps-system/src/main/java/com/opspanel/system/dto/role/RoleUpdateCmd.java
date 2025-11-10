@@ -2,9 +2,10 @@ package com.opspanel.system.dto.role;
 
 import lombok.Data;
 
-/** Command for creating a role. */
+/** Command for updating a role. */
 @Data
-public class RoleCreateCmd {
+public class RoleUpdateCmd {
+    private Long roleId;
     private String roleName;
     private String roleKey;
     private Integer roleSort;

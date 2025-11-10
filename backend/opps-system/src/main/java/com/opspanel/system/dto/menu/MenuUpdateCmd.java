@@ -3,10 +3,13 @@ package com.opspanel.system.dto.menu;
 import lombok.Data;
 
 /**
- * Command object for creating a menu.
+ * Command object for updating a menu.
  */
 @Data
-public class MenuCreateCmd {
+public class MenuUpdateCmd {
+
+    /** Menu ID */
+    private Long menuId;
 
     /** Menu name */
     private String menuName;

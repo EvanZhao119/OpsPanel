@@ -2,10 +2,18 @@ package com.opspanel.system.dto.dept;
 
 import lombok.Data;
 
-/** Query filter for departments. */
+/**
+ * Query parameters for department search.
+ */
 @Data
 public class DeptQuery {
-    public String deptName;
-    public Integer status;
-}
 
+    /** Department name keyword */
+    private String deptName;
+
+    /** Parent department ID for hierarchical filtering */
+    private Long parentId;
+
+    /** Department status */
+    private Integer status;
+}
