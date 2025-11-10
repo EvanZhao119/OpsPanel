@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: opspanel
+    name: opps-admin
   datasource:
     url: jdbc:mysql://localhost:3306/opspanel?useSSL=false&serverTimezone=UTC
     username: root
@@ -13,8 +13,13 @@ spring:
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
       logic-delete-field: deleted
       logic-delete-value: 1
       logic-not-delete-value: 0
+
+logging:
+  level:
+    com.opspanel: info

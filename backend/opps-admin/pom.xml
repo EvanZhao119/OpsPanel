@@ -11,35 +11,47 @@
     <artifactId>opps-admin</artifactId>
 
     <dependencies>
+        <!-- Core modules -->
+        <dependency>
+            <groupId>com.opspanel</groupId>
+            <artifactId>opps-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.opspanel</groupId>
             <artifactId>opps-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.opspanel</groupId>
             <artifactId>opps-system</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- Web + Security -->
         <dependency>
-            <groupId>com.opspanel</groupId>
-            <artifactId>opps-task</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.opspanel</groupId>
-            <artifactId>opps-dashboard</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
+        <!-- OpenAPI / Swagger -->
         <dependency>
-            <groupId>com.opspanel</groupId>
-            <artifactId>opps-insight</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
         </dependency>
+
+        <!-- Lombok -->
         <dependency>
-            <groupId>com.opspanel</groupId>
-            <artifactId>opps-api</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
