@@ -1,0 +1,67 @@
+CREATE TABLE IF NOT EXISTS sys_user (
+  user_id     BIGINT PRIMARY KEY AUTO_INCREMENT,
+  username    VARCHAR(50)  NOT NULL UNIQUE,
+  password    VARCHAR(200) NOT NULL,
+  nick_name   VARCHAR(50),
+  email       VARCHAR(100),
+  phone       VARCHAR(20),
+  status      TINYINT DEFAULT 1,
+  dept_id     BIGINT,
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted     TINYINT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS sys_role (
+  role_id   BIGINT PRIMARY KEY AUTO_INCREMENT,
+  role_name VARCHAR(50) NOT NULL,
+  role_key  VARCHAR(50) NOT NULL,
+  sort      INT DEFAULT 0,
+  status    TINYINT DEFAULT 1,
+  deleted   TINYINT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS sys_dept (
+  dept_id   BIGINT PRIMARY KEY AUTO_INCREMENT,
+  parent_id BIGINT DEFAULT 0,
+  dept_name VARCHAR(100) NOT NULL,
+  sort      INT DEFAULT 0,
+  status    TINYINT DEFAULT 1,
+  deleted   TINYINT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS sys_menu (
+  menu_id   BIGINT PRIMARY KEY AUTO_INCREMENT,
+  parent_id BIGINT DEFAULT 0,
+  menu_name VARCHAR(100) NOT NULL,
+  path      VARCHAR(200),
+  component VARCHAR(200),
+  perms     VARCHAR(200),
+  type      TINYINT DEFAULT 1,
+  sort      INT DEFAULT 0,
+  visible   TINYINT DEFAULT 1,
+  status    TINYINT DEFAULT 1,
+  deleted   TINYINT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS sys_oper_log (
+  oper_id        BIGINT PRIMARY KEY AUTO_INCREMENT,
+  title          VARCHAR(200),
+  method         VARCHAR(200),
+  request_method VARCHAR(10),
+  oper_name      VARCHAR(50),
+  oper_url       VARCHAR(500),
+  oper_ip        VARCHAR(64),
+  status         TINYINT DEFAULT 0,
+  error_msg      VARCHAR(2000),
+  oper_time      DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS sys_login_log (
+  login_id  BIGINT PRIMARY KEY AUTO_INCREMENT,
+  username  VARCHAR(50),
+  ipaddr    VARCHAR(64),
+  status    TINYINT DEFAULT 0,
+  msg       VARCHAR(500),
+  login_time DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

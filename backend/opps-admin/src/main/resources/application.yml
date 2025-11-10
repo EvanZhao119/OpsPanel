@@ -4,3 +4,17 @@ server:
 spring:
   application:
     name: opspanel
+  datasource:
+    url: jdbc:mysql://localhost:3306/opspanel?useSSL=false&serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0

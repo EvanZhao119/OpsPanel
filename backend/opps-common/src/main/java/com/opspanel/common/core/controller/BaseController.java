@@ -1,32 +1,34 @@
 package com.opspanel.common.core.controller;
 
-import com.github.pagehelper.PageInfo;
-import com.opspanel.common.core.domain.PageDomain;
-import com.opspanel.common.core.domain.TableDataInfo;
-import com.opspanel.common.core.domain.TableSupport;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.opspanel.common.api.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
-import java.util.List;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * Base controller providing common pagination utilities.
+ * Base controller providing unified pagination and response utilities.
  *
- * <p>All API controllers should extend this class to leverage
- * automatic pagination support and unified response formatting.</p>
+ * <p>This class simplifies pagination setup using MyBatis-Plus and
+ * standardizes API responses with {@link ApiResponse}.</p>
  *
- * <p>Example usage in a controller:
+ * <p>Example usage:
  * <pre>
  * {@code
  * @RestController
- * @RequestMapping("/api/users")
- * public class UserController extends BaseController {
+ * @RequestMapping("/api/system/user")
+ * public class SysUserController extends BaseController {
  *
  *     @GetMapping("/list")
- *     public TableDataInfo<User> list(UserQuery query) {
- *         startPage();  // Auto-parse pagination from request
- *         List<User> list = userService.selectUserList(query);
- *         return getDataTable(list);
+ *     public ApiResponse<IPage<SysUser>> list(UserQuery query,
+ *                                             @RequestParam(defaultValue = "1") int pageNum,
+ *                                             @RequestParam(defaultValue = "10") int pageSize) {
+ *         Page<SysUser> page = buildPage(pageNum, pageSize, request);
+ *         IPage<SysUser> result = userService.page(page, query.toWrapper());
+ *         return success(result);
  *     }
  * }
  * }
@@ -34,123 +36,100 @@ import java.util.List;
  *
  * @author OpsPanel
  */
-public class BaseController {
+public abstract class BaseController {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    /**
-     * Start pagination for current request.
-     *
-     * <p>Automatically parses pagination parameters from request
-     * (pageNum, pageSize, orderByColumn, isAsc) and initializes
-     * PageHelper for MyBatis queries.</p>
-     *
-     * <p>Must be called BEFORE executing the query.</p>
-     */
-    protected void startPage() {
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        Integer pageNum = pageDomain.getPageNum();
-        Integer pageSize = pageDomain.getPageSize();
-        String orderBy = pageDomain.getOrderBy();
-
-        // Use PageHelper to start pagination
-        com.github.pagehelper.PageHelper.startPage(pageNum, pageSize, orderBy);
-    }
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     /**
-     * Start pagination with reasonable defaults if parameters are missing.
+     * Build a MyBatis-Plus {@link Page} object from HTTP request parameters.
      *
-     * @param pageNum default page number if not provided
-     * @param pageSize default page size if not provided
+     * <p>Parameters supported:
+     * <ul>
+     *   <li>pageNum — current page number (default: 1)</li>
+     *   <li>pageSize — number of records per page (default: 10)</li>
+     *   <li>orderByColumn — optional column name for ordering</li>
+     *   <li>isAsc — asc / desc (default: asc)</li>
+     * </ul>
+     * </p>
+     *
+     * @param request current HTTP request
+     * @param <T> entity type
+     * @return configured Page object
      */
-    protected void startPage(Integer pageNum, Integer pageSize) {
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        if (pageDomain.getPageNum() == null) {
-            pageDomain.setPageNum(pageNum);
-        }
-        if (pageDomain.getPageSize() == null) {
-            pageDomain.setPageSize(pageSize);
+    protected <T> Page<T> buildPage(HttpServletRequest request) {
+        int pageNum = parseInt(request.getParameter("pageNum"), 1);
+        int pageSize = parseInt(request.getParameter("pageSize"), 10);
+        String orderBy = request.getParameter("orderByColumn");
+        String isAsc = request.getParameter("isAsc");
+
+        Page<T> page = new Page<>(pageNum, pageSize);
+
+        if (StringUtils.hasText(orderBy)) {
+            boolean asc = !"desc".equalsIgnoreCase(isAsc);
+            page.addOrder(asc
+                    ? com.baomidou.mybatisplus.core.metadata.OrderItem.asc(orderBy)
+                    : com.baomidou.mybatisplus.core.metadata.OrderItem.desc(orderBy));
         }
 
-        String orderBy = pageDomain.getOrderBy();
-        com.github.pagehelper.PageHelper.startPage(
-                pageDomain.getPageNum(),
-                pageDomain.getPageSize(),
-                orderBy
-        );
+        return page;
     }
 
     /**
-     * Wrap query results into paginated response.
+     * Build Page object directly with parameters.
      *
-     * <p>Automatically extracts total count from PageHelper and
-     * constructs a standard {@link TableDataInfo} response.</p>
-     *
-     * @param list the query result list (from MyBatis after startPage)
-     * @param <T> type of list elements
-     * @return paginated table data
+     * @param pageNum  current page number
+     * @param pageSize page size
+     * @param <T> entity type
+     * @return Page object
      */
-    protected <T> TableDataInfo<T> getDataTable(List<T> list) {
-        if (list == null || list.isEmpty()) {
-            return TableDataInfo.empty();
-        }
-
-        PageInfo<T> pageInfo = new PageInfo<>(list);
-        return TableDataInfo.success(list, pageInfo.getTotal());
+    protected <T> Page<T> buildPage(int pageNum, int pageSize) {
+        return new Page<>(pageNum, pageSize);
     }
 
     /**
-     * Wrap query results with custom message.
+     * Wrap paginated data into a standard {@link ApiResponse}.
      *
-     * @param list query result list
-     * @param message custom message
-     * @param <T> type of list elements
-     * @return paginated table data with message
+     * @param page MyBatis-Plus page result
+     * @param <T>  entity type
+     * @return standardized API response
      */
-    protected <T> TableDataInfo<T> getDataTable(List<T> list, String message) {
-        TableDataInfo<T> dataInfo = getDataTable(list);
-        dataInfo.setMessage(message);
-        return dataInfo;
+    protected <T> ApiResponse<IPage<T>> success(IPage<T> page) {
+        return ApiResponse.ok(page);
     }
 
     /**
-     * Return successful response without pagination.
+     * Wrap arbitrary data into success response.
      *
-     * @param list data list
-     * @param <T> type of list elements
-     * @return table data info (total = list size)
+     * @param data data payload
+     * @param <T> data type
+     * @return success response
      */
-    protected <T> TableDataInfo<T> success(List<T> list) {
-        return new TableDataInfo<>(list, list == null ? 0 : list.size());
+    protected <T> ApiResponse<T> success(T data) {
+        return ApiResponse.ok(data);
     }
 
     /**
-     * Return error response.
+     * Return an error response with custom message.
      *
      * @param message error message
-     * @param <T> type placeholder
-     * @return error table data info
+     * @return error response
      */
-    protected <T> TableDataInfo<T> error(String message) {
-        return new TableDataInfo<>(null, 0, 500, message);
+    protected ApiResponse<Void> error(String message) {
+        return ApiResponse.error(message);
     }
 
     /**
-     * Get current page domain from request context.
+     * Parse integer with fallback.
      *
-     * @return current page domain
+     * @param value input string
+     * @param defaultVal default value
+     * @return parsed integer or default value
      */
-    protected PageDomain getPageDomain() {
-        return TableSupport.getPageDomain();
-    }
-
-    /**
-     * Clear pagination thread local to prevent memory leak.
-     *
-     * <p>PageHelper automatically clears after query execution,
-     * but this can be used for manual cleanup in exceptional cases.</p>
-     */
-    protected void clearPage() {
-        com.github.pagehelper.PageHelper.clearPage();
+    private int parseInt(String value, int defaultVal) {
+        try {
+            return StringUtils.hasText(value) ? Integer.parseInt(value) : defaultVal;
+        } catch (NumberFormatException e) {
+            return defaultVal;
+        }
     }
 }
