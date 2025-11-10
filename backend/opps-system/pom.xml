@@ -56,6 +56,12 @@
             <artifactId>opps-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.opspanel</groupId>
+            <artifactId>opps-framework</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <!-- Build configuration -->
