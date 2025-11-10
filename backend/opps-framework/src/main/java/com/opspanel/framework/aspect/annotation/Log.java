@@ -1,4 +1,4 @@
-package com.opspanel.framework.annotation;
+package com.opspanel.framework.aspect.annotation;
 
 import java.lang.annotation.*;
 

@@ -1,6 +1,6 @@
-package com.opspanel.framework.aop;
+package com.opspanel.framework.aspect;
 
-import com.opspanel.framework.annotation.Log;
+import com.opspanel.framework.aspect.annotation.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

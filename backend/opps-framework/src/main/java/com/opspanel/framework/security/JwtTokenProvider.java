@@ -1,61 +1,82 @@
 package com.opspanel.framework.security;
 
-import com.opspanel.framework.security.model.AuthenticatedUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 /**
- * Utility class for generating and validating JWT tokens.
+ * JWT Token provider with support for both access and refresh tokens.
  */
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret}")
-    private String secret;
+    @Value("${security.jwt.secret}")
+    private String secretKey;
 
-    @Value("${jwt.expiration}")
-    private long expiration;
+    @Value("${security.jwt.access-token-expiration-ms:900000}") // 15 min
+    private long accessTokenValidity;
 
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+    @Value("${security.jwt.refresh-token-expiration-ms:604800000}") // 7 days
+    private long refreshTokenValidity;
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public String generateToken(AuthenticatedUser user) {
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + expiration);
+    /** Generate access token. */
+    public String generateAccessToken(String username, Map<String, Object> claims) {
+        return generateToken(username, claims, accessTokenValidity);
+    }
 
+    /** Generate refresh token (long-term). */
+    public String generateRefreshToken(String username) {
+        return generateToken(username, Map.of("type", "refresh"), refreshTokenValidity);
+    }
+
+    private String generateToken(String subject, Map<String, Object> claims, long validityMs) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + validityMs);
         return Jwts.builder()
-                .setSubject(user.getUsername())
-                .claim("userId", user.getUserId())
+                .setClaims(claims)
+                .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String getUsername(String token) {
-        return parseClaims(token).getSubject();
-    }
-
+    /** Validate token signature and expiration. */
     public boolean validateToken(String token) {
         try {
-            parseClaims(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    private Claims parseClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    /** Extract username from token. */
+    public String getUsername(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    /** Extract all claims. */
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
+    /** Check if a token is a refresh token. */
+    public boolean isRefreshToken(String token) {
+        Object type = getClaims(token).get("type");
+        return "refresh".equals(type);
     }
 }
