@@ -1,6 +1,6 @@
 package com.opspanel.system.listener;
 
-import com.opspanel.framework.event.OperLogEvent;
+import com.opspanel.common.event.OperLogEvent;
 import com.opspanel.system.domain.SysOperLog;
 import com.opspanel.system.service.SysOperLogService;
 import lombok.RequiredArgsConstructor;

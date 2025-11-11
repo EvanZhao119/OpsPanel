@@ -62,4 +62,10 @@ public final class UserConstants {
     public static final String EMAIL_PATTERN =
             "^[\\p{L}0-9._%+!#$&'*/=?`{|}~^-]+@[\\p{L}0-9.-]+\\.[\\p{L}]{2,63}$";
 
+    /** User status constants */
+    public static final class Status {
+        public static final String ACTIVE = "0";
+        public static final String DISABLED = "1";
+        public static final String DELETED = "2";
+    }
 }

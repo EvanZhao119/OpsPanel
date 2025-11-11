@@ -1,7 +1,7 @@
 package com.opspanel.framework.aspect;
 
 import com.opspanel.framework.aspect.annotation.LogOperation;
-import com.opspanel.framework.event.OperLogEvent;
+import com.opspanel.common.event.OperLogEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

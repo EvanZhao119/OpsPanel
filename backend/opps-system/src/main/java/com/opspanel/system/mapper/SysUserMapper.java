@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Mapper interface for system user operations.
@@ -36,4 +37,12 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return a list of users matching the specified conditions
      */
     List<SysUser> selectByConditions(@Param("q") UserQuery query);
+
+    @Select("""
+    SELECT r.role_key
+    FROM sys_role r
+    INNER JOIN sys_user_role ur ON r.role_id = ur.role_id
+    WHERE ur.user_id = #{userId}
+""")
+    Set<String> selectRoleKeysByUserId(@Param("userId") Long userId);
 }

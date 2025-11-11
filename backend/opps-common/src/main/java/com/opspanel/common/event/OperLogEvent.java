@@ -1,4 +1,4 @@
-package com.opspanel.framework.event;
+package com.opspanel.common.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
