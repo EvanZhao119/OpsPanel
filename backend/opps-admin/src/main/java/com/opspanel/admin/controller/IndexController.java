@@ -17,6 +17,6 @@ public class IndexController {
 
     @GetMapping("/api/health")
     public ApiResponse<String> health() {
-        return ApiResponse.ok("System is running normally ✅");
+        return ApiResponse.ok("System is running normally");
     }
 }

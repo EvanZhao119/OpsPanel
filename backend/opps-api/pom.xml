@@ -16,5 +16,11 @@
             <artifactId>opps-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- OpenAPI / Swagger -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
+        </dependency>
     </dependencies>
 </project>

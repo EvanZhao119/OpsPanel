@@ -13,6 +13,5 @@ public class OpsPanelApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(OpsPanelApplication.class, args);
-        System.out.println("✅ OpsPanel backend started successfully!");
     }
 }
