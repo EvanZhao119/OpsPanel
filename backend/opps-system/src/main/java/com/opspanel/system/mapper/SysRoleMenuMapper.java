@@ -2,8 +2,8 @@ package com.opspanel.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.opspanel.system.domain.SysRoleMenu;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 /** Mapper for sys_role_menu table. */
-@Repository
+@Mapper
 public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenu> {}

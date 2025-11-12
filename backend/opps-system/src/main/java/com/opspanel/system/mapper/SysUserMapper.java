@@ -3,9 +3,9 @@ package com.opspanel.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.opspanel.system.domain.SysUser;
 import com.opspanel.system.dto.user.UserQuery;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +17,7 @@ import java.util.Set;
  * Custom queries can be defined here when business logic
  * goes beyond the default MyBatis-Plus capabilities.
  */
-@Repository
+@Mapper
 public interface SysUserMapper extends BaseMapper<SysUser> {
 
     /**
