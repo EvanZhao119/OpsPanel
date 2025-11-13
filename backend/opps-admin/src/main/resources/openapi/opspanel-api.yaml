@@ -1,0 +1,353 @@
+##
+# NOTE: This OpenAPI specification file is currently NOT used by the running backend.
+# The active API documentation is generated dynamically via SpringDoc (/v3/api-docs).
+#
+# This YAML file is maintained separately for:
+# - Manual documentation reference
+# - Contract-first design experiments
+# - Potential future use for external SDK generation or public API publishing
+#
+# Keeping this file allows us to track the full API definition independently
+# without affecting the backend runtime behavior.
+#
+# Please visit http://localhost:8080/swagger-ui/index.html
+##
+openapi: 3.0.3
+info:
+  title: OpsPanel Admin Backend API (Full Version)
+  version: 1.0.0
+  description: |
+    Complete OpenAPI 3.0 specification for the OpsPanel Admin system.
+    Includes:
+      - Authentication
+      - System management (user / role / menu / dept)
+      - User-role relations
+      - Role-menu relations
+      - Login logs & operation logs
+      - Health checks
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  ############################
+  # Auth Module
+  ############################
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username: { type: string }
+                password: { type: string }
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthLoginResponse'
+
+  /api/auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken: { type: string }
+      responses:
+        '200':
+          description: New access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken: { type: string }
+
+  /api/auth/me:
+    get:
+      tags: [Auth]
+      summary: Get current authenticated user
+      responses:
+        '200':
+          description: Current user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthMeResponse'
+
+  ############################
+  # Health
+  ############################
+  /:
+    get:
+      tags: [Health]
+      summary: Welcome page
+      responses:
+        '200':
+          description: Welcome string
+
+  /api/health:
+    get:
+      tags: [Health]
+      summary: Health check
+      responses:
+        '200':
+          description: System running
+
+  ############################
+  # User Management
+  ############################
+  /api/system/user/list:
+    get:
+      tags: [User]
+      summary: List users
+      parameters:
+        - name: pageNum
+          in: query
+          schema: { type: integer }
+        - name: pageSize
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Paginated users
+
+  /api/system/user:
+    post:
+      tags: [User]
+      summary: Create user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateCmd'
+      responses:
+        '200': { description: Created }
+    put:
+      tags: [User]
+      summary: Update user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateCmd'
+      responses:
+        '200': { description: Updated }
+
+  /api/system/user/{id}:
+    delete:
+      tags: [User]
+      summary: Delete user
+      parameters:
+        - name: id
+          in: path
+          schema: { type: integer }
+      responses:
+        '200': { description: Deleted }
+
+  ############################
+  # Role Management
+  ############################
+  /api/system/role/list:
+    get:
+      tags: [Role]
+      summary: List roles
+      responses:
+        '200': { description: Paginated roles }
+
+  /api/system/role:
+    post:
+      tags: [Role]
+      summary: Create role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreateCmd'
+      responses:
+        '200': { description: Created }
+    put:
+      tags: [Role]
+      summary: Update role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleUpdateCmd'
+      responses:
+        '200': { description: Updated }
+
+  /api/system/role/{id}:
+    delete:
+      tags: [Role]
+      summary: Delete role
+      parameters:
+        - name: id
+          in: path
+          schema: { type: integer }
+      responses:
+        '200': { description: Deleted }
+
+  ############################
+  # Menu Management
+  ############################
+  /api/system/menu/list:
+    get:
+      tags: [Menu]
+      summary: List menus
+      responses:
+        '200': { description: Paginated menus }
+
+  /api/system/menu:
+    post:
+      tags: [Menu]
+      summary: Create menu
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuCreateCmd'
+      responses:
+        '200': { description: Created }
+    put:
+      tags: [Menu]
+      summary: Update menu
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuUpdateCmd'
+      responses:
+        '200': { description: Updated }
+
+  /api/system/menu/{id}:
+    delete:
+      tags: [Menu]
+      summary: Delete menu
+      parameters:
+        - name: id
+          in: path
+          schema: { type: integer }
+      responses:
+        '200': { description: Deleted }
+
+  ############################
+  # Dept Management
+  ############################
+  /api/system/dept/list:
+    get:
+      tags: [Dept]
+      summary: List departments
+      responses:
+        '200': { description: Paginated depts }
+
+  /api/system/dept:
+    post:
+      tags: [Dept]
+      summary: Create department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptCreateCmd'
+    put:
+      tags: [Dept]
+      summary: Update department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptUpdateCmd'
+
+  /api/system/dept/{id}:
+    delete:
+      tags: [Dept]
+      summary: Delete department
+      parameters:
+        - name: id
+          in: path
+          schema: { type: integer }
+      responses:
+        '200': { description: Deleted }
+
+  ############################
+  # User-Role Relations
+  ############################
+  /api/system/user-role/assign:
+    post:
+      tags: [UserRole]
+      summary: Assign roles to user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRoleAssignCmd'
+      responses:
+        '200': { description: Assigned }
+
+  /api/system/user-role/{userId}:
+    delete:
+      tags: [UserRole]
+      summary: Remove all roles of a user
+      parameters:
+        - name: userId
+          in: path
+          schema: { type: integer }
+      responses:
+        '200': { description: Removed }
+
+  /api/system/user-role/list:
+    get:
+      tags: [UserRole]
+      summary: List roles assigned to a user
+      parameters:
+        - name: userId
+          in: query
+          schema: { type: integer }
+      responses:
+        '200': { description: List of role IDs }
+
+  ############################
+  # Role-Menu Relations
+  ############################
+  /api/system/role-menu/assign:
+    post:
+      tags: [RoleMenu]
+      summary: Assign menus to role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleMenuAssignCmd'
+      responses:
+        '200': { description: Assigned }
+
+  /api/system/role-menu/{roleId}:
+    delete:
+      tags: [RoleMenu]
+      summary: Remove all menus of a role
+      parameters:
+        - name: roleId
+          in: path
+          schema: { type: integer }
+      responses:
+        '200': { description: Removed }
+
+  /api/system/role-menu/list:
+    get:
+      tags: [RoleMenu]
+      summary: List menus assigned to a role
+      parameters:
