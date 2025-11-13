@@ -1,4 +1,4 @@
-package com.opspanel.framework.security;
+package com.opspanel.framework.util;
 
 import com.opspanel.framework.security.model.AuthenticatedUser;
 import org.springframework.security.core.Authentication;

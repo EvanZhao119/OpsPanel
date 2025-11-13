@@ -2,54 +2,68 @@
  * vite.config.js
  * ------------------------------------------------------------
  * Vite configuration for OpsPanel Admin UI
- * - Vue 3 support
- * - Proxy forwarding for /api → http://localhost:8080
- * - Logs proxy activity in terminal
+ * - Vue 3 SFC + JSX support
+ * - Loads .env files
+ * - Full proxy with logging
+ * - Aliases
  * ------------------------------------------------------------
  */
 
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import path from 'path'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
 
-  console.log('Vite config loaded')
-  console.log('Proxy target:', 'http://localhost:8080')
+  const backendTarget = env.VITE_BACKEND_URL || 'http://localhost:8080'
+
+  console.log('------------------------------------------------------------')
+  console.log(' Vite config loaded')
+  console.log(' Backend API Target:', backendTarget)
+  console.log('------------------------------------------------------------')
 
   return {
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      vueJsx() 
+    ],
+
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
       },
     },
+
     server: {
-      port: env.VITE_PORT || 5173,
+      port: env.VITE_PORT ? Number(env.VITE_PORT) : 5173,
       open: true,
       proxy: {
         '/api': {
-          target: 'http://localhost:8080', // backend service port
+          target: backendTarget,
           changeOrigin: true,
           secure: false,
-          ws: true, 
+          ws: true,
+
           configure: (proxy, options) => {
-            // log all proxy requests and responses
             proxy.on('proxyReq', (proxyReq, req) => {
-              const targetUrl = `${options.target}${req.url}`
-              console.log(`[VITE PROXY] ${req.method} ${req.url} → ${targetUrl}`)
+              const fullUrl = `${options.target}${req.url}`
+              console.log(`[VITE PROXY] ${req.method} ${req.url} → ${fullUrl}`)
             })
+
             proxy.on('proxyRes', (proxyRes, req) => {
               console.log(`[VITE PROXY RES] ${req.method} ${req.url} ← ${proxyRes.statusCode}`)
             })
-            proxy.on('error', (err, req, res) => {
+
+            proxy.on('error', (err, req) => {
               console.error(`[VITE PROXY ERROR] ${req.url}:`, err.message)
             })
           },
         },
       },
     },
+
     define: {
       __APP_ENV__: JSON.stringify(env.VITE_APP_ENV || 'development'),
     },
