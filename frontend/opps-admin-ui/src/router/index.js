@@ -1,14 +1,19 @@
+// src/router/index.js
+
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Dashboard from '@/views/dashboard/index.vue'
-import Login from '@/views/login/index.vue'
-import User from '@/views/system/user/index.vue'
-import Role from '@/views/system/role/index.vue'
-import Menu from '@/views/system/menu/index.vue'
-import Dept from '@/views/system/dept/index.vue'
-import UserRole from '@/views/system/userRole/index.vue'
-import RoleMenu from '@/views/system/roleMenu/index.vue'
-import Log from '@/views/system/log/index.vue'
+// Top-level pages
+import LoginPage from '@/views/login/LoginPage.vue'
+import DashboardPage from '@/views/dashboard/DashboardPage.vue'
+
+// System module pages
+import UserPage from '@/views/system/user/UserPage.vue'
+import RolePage from '@/views/system/role/RolePage.vue'
+import MenuPage from '@/views/system/menu/MenuPage.vue'
+import DeptPage from '@/views/system/dept/DeptPage.vue'
+import UserRolePage from '@/views/system/userRole/UserRolePage.vue'
+import RoleMenuPage from '@/views/system/roleMenu/RoleMenuPage.vue'
+import LogPage from '@/views/system/log/LogPage.vue'
 
 const routes = [
   {
@@ -18,25 +23,25 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: LoginPage
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard
+    component: DashboardPage
   },
   {
     path: '/system',
     name: 'System',
     redirect: '/system/user',
     children: [
-      { path: 'user', name: 'User', component: User },
-      { path: 'role', name: 'Role', component: Role },
-      { path: 'menu', name: 'Menu', component: Menu },
-      { path: 'dept', name: 'Dept', component: Dept },
-      { path: 'userRole', name: 'UserRole', component: UserRole },
-      { path: 'roleMenu', name: 'RoleMenu', component: RoleMenu },
-      { path: 'log', name: 'Log', component: Log },
+      { path: 'user', name: 'User', component: UserPage },
+      { path: 'role', name: 'Role', component: RolePage },
+      { path: 'menu', name: 'Menu', component: MenuPage },
+      { path: 'dept', name: 'Dept', component: DeptPage },
+      { path: 'userRole', name: 'UserRole', component: UserRolePage },
+      { path: 'roleMenu', name: 'RoleMenu', component: RoleMenuPage },
+      { path: 'log', name: 'Log', component: LogPage }
     ]
   }
 ]

@@ -24,7 +24,7 @@ export async function login(data) {
 /** Fetch current user info */
 export function getUserInfo() {
   return request({
-    url: '/api/system/user/info',
+    url: '/api/auth/me',
     method: 'get'
   })
 }

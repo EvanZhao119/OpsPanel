@@ -43,9 +43,13 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { setTokens } from '@/utils/auth'
-import { login } from '@/api/system/login'  // <-- Use your project's login API wrapper
+import { login } from '@/api/system/login'  
+import { useUserStore } from '@/store/user'
+import { getUserInfo } from '@/api/system/login'
+
 
 const router = useRouter()
+const userStore = useUserStore()
 
 // Form fields
 const username = ref('')
@@ -86,6 +90,10 @@ const handleLogin = async () => {
       setTokens({ accessToken: res.data.accessToken, refreshToken: res.data.refreshToken })
       console.log('[Login Success] Token saved.')
 
+      const userRes = await getUserInfo()
+      if (userRes.code === 200) {
+        userStore.setUserInfo(userRes.data)
+      }
       router.push('/dashboard')
     } else {
       errorMessage.value = res?.msg || 'Invalid username or password.'

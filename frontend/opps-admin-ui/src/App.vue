@@ -40,24 +40,45 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 import { clearTokens } from '@/utils/auth'
 import { ElMessageBox } from 'element-plus'
-
 import { ArrowDown } from '@element-plus/icons-vue'
 
+import { useUserStore } from '@/store/user'
+import { getUserInfo } from '@/api/system/login'
+
+/* Current route and router instance */
 const route = useRoute()
 const router = useRouter()
 
+/* Pinia user store */
+const userStore = useUserStore()
+
+/* Determine if current page is the login page */
 const isLoginPage = computed(() => route.path === '/login')
 
-const username = 'Admin'
+/* Read username from Pinia store */
+const username = computed(() => userStore.username || 'User')
 
+/* Auto-load user info after page refresh (if token exists) */
+onMounted(async () => {
+  // Only fetch user info when token exists and username is still empty
+  if (userStore.token && !userStore.username) {
+    const res = await getUserInfo()
+    if (res.code === 200) {
+      userStore.setUserInfo(res.data)
+    }
+  }
+})
+
+/* Logout logic */
 const logout = async () => {
   await ElMessageBox.confirm('Confirm logout?', 'Logout', { type: 'warning' })
   clearTokens()
+  userStore.logout()
   router.push('/login')
 }
 </script>
