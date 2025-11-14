@@ -21,17 +21,17 @@ public class SysUserController {
 
     @GetMapping("/list")
     public ApiResponse<IPage<SysUser>> list(UserQuery q,
-                                            @RequestParam(defaultValue = "1") int pageNum,
-                                            @RequestParam(defaultValue = "10") int pageSize) {
+                                            @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         return ApiResponse.ok(userService.page(q, pageNum, pageSize));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<Long> create(@RequestBody UserCreateCmd cmd) {
         return ApiResponse.ok(userService.create(cmd));
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ApiResponse<Boolean> update(@RequestBody UserUpdateCmd cmd) {
         return ApiResponse.ok(userService.update(cmd));
     }

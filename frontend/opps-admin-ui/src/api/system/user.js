@@ -20,7 +20,7 @@ export function getUser(userId) {
 
 export function createUser(data) {
   return request({
-    url: '/api/system/user',
+    url: '/api/system/user/create',
     method: 'post',
     data
   })
@@ -28,7 +28,7 @@ export function createUser(data) {
 
 export function updateUser(data) {
   return request({
-    url: '/api/system/user',
+    url: '/api/system/user/update',
     method: 'put',
     data
   })
