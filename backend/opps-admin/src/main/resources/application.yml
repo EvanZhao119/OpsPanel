@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/opspanel?useSSL=false&serverTimezone=UTC
     username: root
-    password: root
+    password: 12345678
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis-plus:
@@ -27,6 +27,7 @@ logging:
 security:
   jwt:
     secret: "e7v6f9d3a1b0c4x8z9y2r7t5u6p3q0m1n5w8e2r4t6y7u8i9o0p1q2w3e4r5t6"
-    expiration: 86400000
+    access-token-expiration-ms: 600000       # 10 minutes
+    refresh-token-expiration-ms: 3600000     # 1 hour
     token-prefix: Bearer
     header: Authorization

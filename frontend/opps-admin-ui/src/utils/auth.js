@@ -1,32 +1,30 @@
 /**
  * src/utils/auth.js
  * ------------------------------------------------------------
- * Provides helper methods for managing authentication tokens.
- * Tokens are stored in localStorage for persistence between sessions.
+ * Stores Access Token & Refresh Token in localStorage
  * ------------------------------------------------------------
  */
 
-const TOKEN_KEY = 'opspanel_token' // You can customize this prefix if needed
+const ACCESS_TOKEN_KEY = 'opspanel_access_token'
+const REFRESH_TOKEN_KEY = 'opspanel_refresh_token'
 
-/**
- * Save token to localStorage
- * @param {string} token - JWT or access token
- */
-export function setToken(token) {
-  localStorage.setItem(TOKEN_KEY, token)
+/** Save tokens */
+export function setTokens({ accessToken, refreshToken }) {
+  if (accessToken) localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
+  if (refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
 }
 
-/**
- * Retrieve token from localStorage
- * @returns {string|null}
- */
-export function getToken() {
-  return localStorage.getItem(TOKEN_KEY)
+/** Get tokens */
+export function getAccessToken() {
+  return localStorage.getItem(ACCESS_TOKEN_KEY)
 }
 
-/**
- * Remove token (on logout or expired)
- */
-export function removeToken() {
-  localStorage.removeItem(TOKEN_KEY)
+export function getRefreshToken() {
+  return localStorage.getItem(REFRESH_TOKEN_KEY)
+}
+
+/** Remove all tokens */
+export function clearTokens() {
+  localStorage.removeItem(ACCESS_TOKEN_KEY)
+  localStorage.removeItem(REFRESH_TOKEN_KEY)
 }

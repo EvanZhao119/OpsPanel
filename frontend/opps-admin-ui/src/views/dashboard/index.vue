@@ -1,19 +1,11 @@
 <template>
-  <div class="layout">
-    <SidebarMenu />
-    <div class="main-content">
-      <HeaderBar />
-      <div class="content">
-        <h1>Welcome to OpsPanel Admin Dashboard 🎉</h1>
-        <p>This dashboard integrates your system APIs dynamically.</p>
-      </div>
-    </div>
+  <div>
+    <h1>Welcome to OpsPanel Admin Dashboard 🎉</h1>
+    <p>This dashboard integrates your system APIs dynamically.</p>
   </div>
 </template>
 
 <script setup>
-import HeaderBar from '@/components/HeaderBar.vue'
-import SidebarMenu from '@/components/SidebarMenu.vue'
 </script>
 
 <style scoped>

@@ -2,6 +2,9 @@
 --  Database initialization script for OpsPanel System Module
 --  Compatible with MySQL 8.x
 -- ==========================================================
+CREATE DATABASE IF NOT EXISTS opspanel
+  DEFAULT CHARACTER SET utf8mb4
+  DEFAULT COLLATE utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `sys_user`;
 DROP TABLE IF EXISTS `sys_role`;

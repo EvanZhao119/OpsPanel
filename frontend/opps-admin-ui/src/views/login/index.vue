@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h1>TEST LOGIN PAGE</h1>
-
     <div class="login-container">
       <div class="login-box">
         <h2 class="title">OpsPanel Admin</h2>
@@ -44,7 +42,7 @@
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { setToken } from '@/utils/auth'
+import { setTokens } from '@/utils/auth'
 import { login } from '@/api/system/login'  // <-- Use your project's login API wrapper
 
 const router = useRouter()
@@ -84,8 +82,8 @@ const handleLogin = async () => {
     console.log('[Login Response] ', res)
 
     // Backend must return { code: 200, data: { token: 'xxx' } }
-    if (res && res.code === 200 && res.data?.token) {
-      setToken(res.data.token)
+    if (res && res.code === 200 && res.data?.accessToken) {
+      setTokens({ accessToken: res.data.accessToken, refreshToken: res.data.refreshToken })
       console.log('[Login Success] Token saved.')
 
       router.push('/dashboard')

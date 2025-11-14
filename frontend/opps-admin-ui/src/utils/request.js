@@ -1,55 +1,116 @@
 /**
  * src/utils/request.js
  * ------------------------------------------------------------
- * Axios wrapper for unified HTTP request handling.
- * Includes:
- *  - Base URL & timeout
- *  - Token injection via request interceptor
- *  - Unified error handling for expired tokens, etc.
+ * Axios instance with:
+ *  - Inject access token into requests
+ *  - Auto refresh token when 401 happens
+ *  - Queue pending requests during token refresh
  * ------------------------------------------------------------
  */
 
 import axios from 'axios'
-import { getToken, removeToken } from './auth'
+import {
+  getAccessToken,
+  getRefreshToken,
+  setTokens,
+  clearTokens,
+} from './auth'
 
-// Create axios instance
+let isRefreshing = false
+let refreshQueue = []
+
+/** Add request callback to queue */
+function subscribeTokenRefresh(cb) {
+  refreshQueue.push(cb)
+}
+
+/** Run all queued callbacks once new token is ready */
+function onTokenRefreshed(newToken) {
+  refreshQueue.forEach(cb => cb(newToken))
+  refreshQueue = []
+}
+
 const service = axios.create({
-  baseURL: import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE_URL || ''), // Backend base URL
-  timeout: 10000 // request timeout (ms)
+  baseURL: import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE_URL || ''),
+  timeout: 10000
 })
 
-// Request interceptor
+/* ------------------------------------------------------------
+ * Request Interceptor
+ * ------------------------------------------------------------ */
 service.interceptors.request.use(
-  (config) => {
-    const token = getToken()
+  config => {
+    const token = getAccessToken()
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },
-  (error) => {
-    console.error('[Request Error]', error)
-    return Promise.reject(error)
-  }
+  error => Promise.reject(error)
 )
 
-// Response interceptor
+/* ------------------------------------------------------------
+ * Response Interceptor
+ * ------------------------------------------------------------ */
 service.interceptors.response.use(
-  (response) => {
-    const { data } = response
-    // Optional: normalize backend response structure
-    if (data && data.code && data.code !== 200) {
-      console.warn('[API Warning]', data.message)
+  response => response.data,
+  async error => {
+    const { response, config } = error
+
+    if (!response) return Promise.reject(error)
+
+    /** Access token expired → try refresh */
+    if (response.status === 401) {
+      const refreshToken = getRefreshToken()
+      if (!refreshToken) {
+        clearTokens()
+        window.location.href = '/login'
+        return Promise.reject(error)
+      }
+
+      /** Already refreshing → queue this request */
+      if (isRefreshing) {
+        return new Promise(resolve => {
+          subscribeTokenRefresh(newToken => {
+            config.headers.Authorization = `Bearer ${newToken}`
+            resolve(service(config))
+          })
+        })
+      }
+
+      isRefreshing = true
+
+      try {
+        /** call refresh endpoint */
+        const refreshRes = await axios.post('/api/auth/refresh', {
+          refreshToken: refreshToken
+        })
+
+        const newAccess = refreshRes.data?.accessToken
+        const newRefresh = refreshRes.data?.refreshToken
+
+        if (!newAccess) throw new Error('Refresh failed')
+
+        // Save tokens
+        setTokens({ accessToken: newAccess, refreshToken: newRefresh })
+
+        // Notify queued requests
+        onTokenRefreshed(newAccess)
+
+        // Retry failed request
+        config.headers.Authorization = `Bearer ${newAccess}`
+        return service(config)
+
+      } catch (e) {
+        clearTokens()
+        window.location.href = '/login'
+        return Promise.reject(e)
+
+      } finally {
+        isRefreshing = false
+      }
     }
-    return data
-  },
-  (error) => {
-    console.error('[Response Error]', error)
-    if (error.response && error.response.status === 401) {
-      // Token expired or invalid
-      removeToken()
-      window.location.href = '/login'
-    }
+
     return Promise.reject(error)
   }
 )

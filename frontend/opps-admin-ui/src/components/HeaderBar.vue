@@ -11,13 +11,13 @@
   <script setup>
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { removeToken } from '@/utils/auth'
+  import { clearTokens } from '@/utils/auth'
   
   const router = useRouter()
   const username = ref('admin') // TODO: 从后端userInfo接口加载
   
   const logout = () => {
-    removeToken()
+    clearTokens()
     router.push('/login')
   }
   </script>

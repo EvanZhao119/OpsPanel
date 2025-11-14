@@ -43,7 +43,7 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import SidebarMenu from '@/components/SidebarMenu.vue'
-import { removeToken } from '@/utils/auth'
+import { clearTokens } from '@/utils/auth'
 import { ElMessageBox } from 'element-plus'
 
 import { ArrowDown } from '@element-plus/icons-vue'
@@ -57,7 +57,7 @@ const username = 'Admin'
 
 const logout = async () => {
   await ElMessageBox.confirm('Confirm logout?', 'Logout', { type: 'warning' })
-  removeToken()
+  clearTokens()
   router.push('/login')
 }
 </script>
