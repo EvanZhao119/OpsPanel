@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function listDepts(params) {
   return request({
-    url: '/api/system/dept',
+    url: '/api/system/dept/list',
     method: 'get',
     params
   })
@@ -20,7 +20,7 @@ export function getDept(id) {
 
 export function createDept(data) {
   return request({
-    url: '/api/system/dept',
+    url: '/api/system/dept/create',
     method: 'post',
     data
   })
@@ -28,15 +28,16 @@ export function createDept(data) {
 
 export function updateDept(data) {
   return request({
-    url: '/api/system/dept',
-    method: 'put',
+    url: '/api/system/dept/update',
+    method: 'post',
     data
   })
 }
 
-export function deleteDept(id) {
+export function deleteDept(ids) {
   return request({
-    url: `/api/system/dept/${id}`,
-    method: 'delete'
+    url: `/api/system/dept/batch-delete`,
+    method: 'post',
+    data: ids
   })
 }
