@@ -6,9 +6,11 @@ import com.opspanel.system.dto.role.RoleCreateCmd;
 import com.opspanel.system.dto.role.RoleQuery;
 import com.opspanel.system.dto.role.RoleUpdateCmd;
 
+import java.util.List;
+
 public interface SysRoleService {
     IPage<SysRole> page(RoleQuery query, int pageNum, int pageSize);
     Long create(RoleCreateCmd cmd);
     boolean update(RoleUpdateCmd cmd);
-    boolean remove(Long id);
+    boolean batchRemove(List<Long> ids);
 }

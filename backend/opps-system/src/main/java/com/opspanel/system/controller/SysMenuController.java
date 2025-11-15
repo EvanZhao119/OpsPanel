@@ -9,6 +9,8 @@ import com.opspanel.system.dto.menu.MenuUpdateCmd;
 import com.opspanel.system.service.SysMenuService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * REST controller for menu management.
  */
@@ -27,15 +29,15 @@ public class SysMenuController {
      */
     @GetMapping("/list")
     public ApiResponse<IPage<SysMenu>> list(MenuQuery query,
-                                            @RequestParam(defaultValue = "1") int pageNum,
-                                            @RequestParam(defaultValue = "10") int pageSize) {
+                                            @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         return ApiResponse.ok(menuService.page(query, pageNum, pageSize));
     }
 
     /**
      * Create a new menu.
      */
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<Long> create(@RequestBody MenuCreateCmd cmd) {
         return ApiResponse.ok(menuService.create(cmd));
     }
@@ -43,16 +45,16 @@ public class SysMenuController {
     /**
      * Update an existing menu.
      */
-    @PutMapping
+    @PostMapping("/update")
     public ApiResponse<Boolean> update(@RequestBody MenuUpdateCmd cmd) {
         return ApiResponse.ok(menuService.update(cmd));
     }
 
     /**
-     * Delete a menu by ID.
+     * Delete menus by IDs.
      */
-    @DeleteMapping("/{id}")
-    public ApiResponse<Boolean> delete(@PathVariable Long id) {
-        return ApiResponse.ok(menuService.remove(id));
+    @PostMapping("/batch-delete")
+    public ApiResponse<Boolean> batchDelete(@RequestBody List<Long> ids) {
+        return ApiResponse.ok(menuService.batchDelete(ids));
     }
 }

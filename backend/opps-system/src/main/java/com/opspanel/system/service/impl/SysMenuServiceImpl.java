@@ -13,6 +13,8 @@ import com.opspanel.system.service.SysMenuService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Implementation of SysMenuService using MyBatis-Plus.
  */
@@ -48,7 +50,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public boolean remove(Long id) {
-        return this.removeById(id);
+    public boolean batchDelete(List<Long> ids) {
+        return this.removeBatchByIds(ids);
     }
 }

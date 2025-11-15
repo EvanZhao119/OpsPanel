@@ -9,6 +9,8 @@ import com.opspanel.system.dto.dept.DeptUpdateCmd;
 import com.opspanel.system.service.SysDeptService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * REST controller for department management.
  */
@@ -27,15 +29,15 @@ public class SysDeptController {
      */
     @GetMapping("/list")
     public ApiResponse<IPage<SysDept>> list(DeptQuery query,
-                                            @RequestParam(defaultValue = "1") int pageNum,
-                                            @RequestParam(defaultValue = "10") int pageSize) {
+                                            @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         return ApiResponse.ok(deptService.page(query, pageNum, pageSize));
     }
 
     /**
      * Create a new department.
      */
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<Long> create(@RequestBody DeptCreateCmd cmd) {
         return ApiResponse.ok(deptService.create(cmd));
     }
@@ -43,16 +45,16 @@ public class SysDeptController {
     /**
      * Update an existing department.
      */
-    @PutMapping
+    @PostMapping("/update")
     public ApiResponse<Boolean> update(@RequestBody DeptUpdateCmd cmd) {
         return ApiResponse.ok(deptService.update(cmd));
     }
 
     /**
-     * Delete a department by ID.
+     * Delete departments by IDs.
      */
-    @DeleteMapping("/{id}")
-    public ApiResponse<Boolean> delete(@PathVariable Long id) {
-        return ApiResponse.ok(deptService.remove(id));
+    @PostMapping("/batch-delete")
+    public ApiResponse<Boolean> batchDelete(@RequestBody List<Long> ids) {
+        return ApiResponse.ok(deptService.batchDelete(ids));
     }
 }

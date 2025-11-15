@@ -13,6 +13,8 @@ import com.opspanel.system.service.SysDeptService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Implementation of SysDeptService using MyBatis-Plus.
  */
@@ -47,7 +49,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     @Override
-    public boolean remove(Long id) {
-        return this.removeById(id);
+    public boolean batchDelete(List<Long> ids) {
+        return this.removeBatchByIds(ids);
     }
 }

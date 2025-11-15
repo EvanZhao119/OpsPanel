@@ -9,6 +9,8 @@ import com.opspanel.system.dto.role.RoleUpdateCmd;
 import com.opspanel.system.service.SysRoleService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /** REST controller for role management. */
 @RestController
 @RequestMapping("/api/system/role")
@@ -22,23 +24,23 @@ public class SysRoleController {
 
     @GetMapping("/list")
     public ApiResponse<IPage<SysRole>> list(RoleQuery query,
-                                            @RequestParam(defaultValue = "1") int pageNum,
-                                            @RequestParam(defaultValue = "10") int pageSize) {
+                                            @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         return ApiResponse.ok(roleService.page(query, pageNum, pageSize));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<Long> create(@RequestBody RoleCreateCmd cmd) {
         return ApiResponse.ok(roleService.create(cmd));
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public ApiResponse<Boolean> update(@RequestBody RoleUpdateCmd cmd) {
         return ApiResponse.ok(roleService.update(cmd));
     }
 
-    @DeleteMapping("/{id}")
-    public ApiResponse<Boolean> delete(@PathVariable Long id) {
-        return ApiResponse.ok(roleService.remove(id));
+    @PostMapping("/batch-delete")
+    public ApiResponse<Boolean> batchDelete(@RequestBody List<Long> ids) {
+        return ApiResponse.ok(roleService.batchRemove(ids));
     }
 }

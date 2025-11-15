@@ -13,6 +13,8 @@ import com.opspanel.system.service.SysRoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /** Implementation of SysRoleService using MyBatis-Plus. */
 @Service
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
@@ -43,7 +45,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public boolean remove(Long id) {
-        return this.removeById(id);
+    public boolean batchRemove(List<Long> ids) {
+        return this.removeBatchByIds(ids);
     }
 }

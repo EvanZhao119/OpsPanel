@@ -6,6 +6,8 @@ import com.opspanel.system.dto.dept.DeptCreateCmd;
 import com.opspanel.system.dto.dept.DeptQuery;
 import com.opspanel.system.dto.dept.DeptUpdateCmd;
 
+import java.util.List;
+
 /**
  * Service interface for department operations.
  */
@@ -13,5 +15,5 @@ public interface SysDeptService {
     IPage<SysDept> page(DeptQuery query, int pageNum, int pageSize);
     Long create(DeptCreateCmd cmd);
     boolean update(DeptUpdateCmd cmd);
-    boolean remove(Long id);
+    boolean batchDelete(List<Long> ids);
 }

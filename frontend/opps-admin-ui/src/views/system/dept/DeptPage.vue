@@ -2,7 +2,7 @@
     <div class="page">
       <el-form :inline="true" :model="query" class="mb-12">
         <el-form-item label="Dept Name"><el-input v-model="query.name" clearable/></el-form-item>
-        <el-form-item label="Status">
+        <el-form-item label="Status"  class="status-form-item">
           <el-select v-model="query.status" clearable>
             <el-option label="Enabled" :value="0" />
             <el-option label="Disabled" :value="1" />
@@ -95,5 +95,6 @@
   <style scoped>
   .page{ padding:16px; }
   .mb-12{ margin-bottom:12px; }
+  .status-form-item { min-width: 160px; }
   </style>
   
