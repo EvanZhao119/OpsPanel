@@ -13,6 +13,8 @@ import com.opspanel.system.service.SysUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 /** Business service for users. */
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
@@ -57,5 +59,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
     @Override
     public boolean remove(Long userId) {
         return this.removeById(userId);
+    }
+
+    @Override
+    public boolean batchRemove(List<Long> userIds){
+        return this.removeBatchByIds(userIds);
     }
 }

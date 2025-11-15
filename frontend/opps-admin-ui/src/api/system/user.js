@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function listUsers(params) {
   return request({
-    url: '/api/system/user',
+    url: '/api/system/user/list',
     method: 'get',
     params
   })
@@ -29,14 +29,15 @@ export function createUser(data) {
 export function updateUser(data) {
   return request({
     url: '/api/system/user/update',
-    method: 'put',
+    method: 'post',
     data
   })
 }
 
-export function deleteUser(userId) {
+export function batchDeleteUsers(ids) {
   return request({
-    url: `/api/system/user/${userId}`,
-    method: 'delete'
+    url: `/api/system/user/batch-delete`,
+    method: 'post',
+    data: ids
   })
 }

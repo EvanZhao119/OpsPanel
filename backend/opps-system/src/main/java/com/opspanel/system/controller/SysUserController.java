@@ -9,6 +9,8 @@ import com.opspanel.system.dto.user.UserUpdateCmd;
 import com.opspanel.system.service.SysUserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/system/user")
 public class SysUserController {
@@ -31,13 +33,18 @@ public class SysUserController {
         return ApiResponse.ok(userService.create(cmd));
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ApiResponse<Boolean> update(@RequestBody UserUpdateCmd cmd) {
         return ApiResponse.ok(userService.update(cmd));
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}")
     public ApiResponse<Boolean> delete(@PathVariable Long id) {
         return ApiResponse.ok(userService.remove(id));
+    }
+
+    @PostMapping("/batch-delete")
+    public ApiResponse<Boolean> batchDelete(@RequestBody List<Long> ids) {
+        return ApiResponse.ok(userService.batchRemove(ids));
     }
 }

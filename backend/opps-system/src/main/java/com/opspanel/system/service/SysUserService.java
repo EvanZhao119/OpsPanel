@@ -7,6 +7,8 @@ import com.opspanel.system.dto.user.UserCreateCmd;
 import com.opspanel.system.dto.user.UserQuery;
 import com.opspanel.system.dto.user.UserUpdateCmd;
 
+import java.util.List;
+
 public interface SysUserService extends IService<SysUser> {
 
     IPage<SysUser> page(UserQuery query, int pageNum, int pageSize);
@@ -16,4 +18,6 @@ public interface SysUserService extends IService<SysUser> {
     boolean update(UserUpdateCmd cmd);
 
     boolean remove(Long userId);
+
+    boolean batchRemove(List<Long> userIds);
 }
