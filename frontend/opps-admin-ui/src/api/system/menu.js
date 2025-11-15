@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function listMenus(params) {
   return request({
-    url: '/api/system/menu',
+    url: '/api/system/menu/list',
     method: 'get',
     params
   })
@@ -20,7 +20,7 @@ export function getMenu(id) {
 
 export function createMenu(data) {
   return request({
-    url: '/api/system/menu',
+    url: '/api/system/menu/create',
     method: 'post',
     data
   })
@@ -28,15 +28,16 @@ export function createMenu(data) {
 
 export function updateMenu(data) {
   return request({
-    url: '/api/system/menu',
-    method: 'put',
+    url: '/api/system/menu/update',
+    method: 'post',
     data
   })
 }
 
-export function deleteMenu(id) {
+export function batchDeleteRole(ids) {
   return request({
-    url: `/api/system/menu/${id}`,
-    method: 'delete'
+    url: `/api/system/menu/batch-delete`,
+    method: 'post',
+    data: ids
   })
 }
