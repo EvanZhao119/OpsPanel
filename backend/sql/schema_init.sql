@@ -140,3 +140,42 @@ CREATE TABLE `sys_oper_log` (
   `status`      TINYINT      DEFAULT 1 COMMENT 'Status (1=success,0=failure)',
   `error_msg`   TEXT COMMENT 'Error message if failed'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Operation Logs';
+
+-- ==========================================================
+--  Operation Tasks Table
+-- ==========================================================
+CREATE TABLE `task_job` (
+  `id`              bigint NOT NULL AUTO_INCREMENT COMMENT 'Primary key of the scheduled job',
+  `job_name`        varchar(100)  NOT NULL COMMENT 'Human-readable name of the job',
+  `job_group`       varchar(50)   NOT NULL DEFAULT 'DEFAULT' COMMENT 'Logical group of the job',
+  `job_type`        varchar(32)   NOT NULL DEFAULT 'JAVA' COMMENT 'Type of job: JAVA / HTTP / AGENT etc.',
+  `invoke_target`   varchar(500)  NOT NULL COMMENT 'Target to invoke (bean.method / URL / agent key)',
+  `cron_expression` varchar(255)  NOT NULL COMMENT 'Cron expression defining the schedule',
+  `misfire_policy`  char(1)       NOT NULL DEFAULT '1' COMMENT 'Misfire policy: 1=default 2=fire now 3=ignore',
+  `concurrent`      char(1)       NOT NULL DEFAULT '1' COMMENT 'Whether concurrent executions are allowed: 0=no 1=yes',
+  `status`          char(1)       NOT NULL DEFAULT '0' COMMENT 'Job status: 0=active 1=paused',
+  `remark`          varchar(255)  DEFAULT NULL COMMENT 'Optional remark',
+  `create_by`       varchar(64)   DEFAULT NULL COMMENT 'Created by',
+  `create_time`     datetime      DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+  `update_by`       varchar(64)   DEFAULT NULL COMMENT 'Last updated by',
+  `update_time`     datetime      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last update timestamp',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Scheduled job table';
+
+CREATE TABLE `task_log` (
+  `id`              bigint NOT NULL AUTO_INCREMENT COMMENT 'Primary key of the log entry',
+  `job_id`          bigint NOT NULL COMMENT 'Reference to the scheduled job',
+  `job_name`        varchar(100) NOT NULL COMMENT 'Job name at the time of execution',
+  `job_group`       varchar(50)  NOT NULL COMMENT 'Job group at the time of execution',
+  `job_type`        varchar(32)  NOT NULL COMMENT 'Job type at the time of execution',
+  `invoke_target`   varchar(500) NOT NULL COMMENT 'Target invoked during execution',
+  `status`          char(1)      NOT NULL DEFAULT '0' COMMENT 'Execution result: 0=success 1=failure',
+  `start_time`      datetime     DEFAULT NULL COMMENT 'Execution start time',
+  `end_time`        datetime     DEFAULT NULL COMMENT 'Execution end time',
+  `elapsed_ms`      bigint       DEFAULT NULL COMMENT 'Execution time in milliseconds',
+  `job_message`     varchar(500) DEFAULT NULL COMMENT 'Short execution message',
+  `exception_info`  text         DEFAULT NULL COMMENT 'Exception stack trace if any',
+  `create_time`     datetime     DEFAULT CURRENT_TIMESTAMP COMMENT 'Log creation time',
+  PRIMARY KEY (`id`),
+  KEY `idx_job_id` (`job_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Scheduled job execution log table';

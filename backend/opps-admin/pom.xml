@@ -30,6 +30,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.opspanel</groupId>
+            <artifactId>opps-task</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Web + Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

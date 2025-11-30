@@ -1,4 +1,4 @@
-package com.opspanel.system.config;
+package com.opspanel.framework.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 /** MyBatis-Plus global configuration. */
 @Configuration
-@MapperScan("com.opspanel.system.mapper")
+@MapperScan("com.opspanel.**.mapper")
 public class MyBatisPlusConfig {
 
     /** Registers pagination interceptor for MySQL. */
