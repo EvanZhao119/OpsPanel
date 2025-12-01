@@ -142,4 +142,16 @@ public class TaskJobServiceImpl implements ITaskJobService {
         }
         jobScheduler.triggerOnce(job);
     }
+
+    @Override
+    public int countAllJobs() {
+        // Reuse existing query method so we do not need to change mapper.
+        // If you have a more efficient COUNT SQL later, you can replace this implementation.
+        TaskJob query = new TaskJob();
+        // You can also set delFlag or status filters here if needed.
+        // e.g. query.setDelFlag(0);
+        java.util.List<TaskJob> list = selectJobList(query);
+        return list != null ? list.size() : 0;
+    }
+
 }

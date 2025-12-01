@@ -179,3 +179,91 @@ CREATE TABLE `task_log` (
   PRIMARY KEY (`id`),
   KEY `idx_job_id` (`job_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Scheduled job execution log table';
+
+-- ==========================================================
+--  Dashboard Table
+-- ==========================================================
+-- 1. Dashboard page definition
+CREATE TABLE dashboard_page (
+    id           BIGINT PRIMARY KEY AUTO_INCREMENT,
+    page_code    VARCHAR(64) NOT NULL UNIQUE COMMENT 'Unique code of the dashboard page',
+    page_name    VARCHAR(128) NOT NULL COMMENT 'Name of the dashboard page',
+    page_type    VARCHAR(32) NOT NULL DEFAULT 'CUSTOM' COMMENT 'SYSTEM or CUSTOM',
+    description  VARCHAR(512) DEFAULT NULL COMMENT 'Description',
+    is_default   TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 = default page',
+    status       TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1 = enabled, 0 = disabled',
+    creator      VARCHAR(64),
+    create_time  DATETIME,
+    updater      VARCHAR(64),
+    update_time  DATETIME,
+    del_flag     TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0 = active, 1 = deleted'
+) COMMENT='Dashboard definition table';
+
+-- 2. Dashboard widget definition
+CREATE TABLE dashboard_widget (
+    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
+    page_id       BIGINT NOT NULL COMMENT 'Dashboard page ID',
+    widget_type   VARCHAR(32) NOT NULL COMMENT 'STAT / CHART / TABLE / CUSTOM',
+    title         VARCHAR(128) NOT NULL COMMENT 'Widget title',
+    position_x    INT NOT NULL DEFAULT 0 COMMENT 'Grid X position',
+    position_y    INT NOT NULL DEFAULT 0 COMMENT 'Grid Y position',
+    width         INT NOT NULL DEFAULT 4 COMMENT 'Grid width',
+    height        INT NOT NULL DEFAULT 3 COMMENT 'Grid height',
+    data_source   VARCHAR(128) NOT NULL COMMENT 'Data source code, e.g., task.failRate24h',
+    config_json   TEXT COMMENT 'Frontend config in JSON',
+    sort_order    INT NOT NULL DEFAULT 0 COMMENT 'Sort order on the page',
+    status        TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1 = enabled',
+    creator       VARCHAR(64),
+    create_time   DATETIME,
+    updater       VARCHAR(64),
+    update_time   DATETIME,
+    del_flag      TINYINT(1) NOT NULL DEFAULT 0,
+    INDEX idx_page (page_id)
+) COMMENT='Dashboard widget table';
+
+-- 3. Dashboard favorite (user preferences)
+CREATE TABLE dashboard_favorite (
+    id          BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id     BIGINT NOT NULL COMMENT 'User ID',
+    page_id     BIGINT NOT NULL COMMENT 'Dashboard page ID',
+    is_home     TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 = set as homepage for this user',
+    create_time DATETIME,
+    UNIQUE KEY uk_user_page (user_id, page_id)
+) COMMENT='User dashboard preference table';
+
+-- ==========================================================
+--  Insight Table
+-- ==========================================================
+-- 1. AI insight session table
+CREATE TABLE insight_session (
+    id           BIGINT PRIMARY KEY AUTO_INCREMENT,
+    session_code VARCHAR(64) NOT NULL UNIQUE COMMENT 'Unique code for the chat session',
+    title        VARCHAR(256) NOT NULL COMMENT 'Session title',
+    user_id      BIGINT NOT NULL COMMENT 'User ID',
+    source_type  VARCHAR(32) NOT NULL COMMENT 'DASHBOARD / TASK / SYSTEM / MANUAL',
+    source_ref   VARCHAR(128) DEFAULT NULL COMMENT 'Reference ID, e.g., dashboard page ID',
+    status       TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1 = active, 0 = closed',
+    create_time  DATETIME,
+    update_time  DATETIME
+) COMMENT='AI insight chat session table';
+
+-- 2. AI insight message table
+CREATE TABLE insight_message (
+    id           BIGINT PRIMARY KEY AUTO_INCREMENT,
+    session_id   BIGINT NOT NULL COMMENT 'Session ID',
+    role         VARCHAR(16) NOT NULL COMMENT 'USER / ASSISTANT / SYSTEM',
+    content      TEXT NOT NULL COMMENT 'Message text content',
+    meta_json    TEXT COMMENT 'Metadata, such as tokens or data source info',
+    create_time  DATETIME,
+    INDEX idx_session (session_id)
+) COMMENT='AI chat message table';
+
+-- 3. Prompt template table
+CREATE TABLE insight_prompt_template (
+    id          BIGINT PRIMARY KEY AUTO_INCREMENT,
+    code        VARCHAR(64) NOT NULL UNIQUE COMMENT 'Template code',
+    description VARCHAR(256) COMMENT 'Template description',
+    content     TEXT NOT NULL COMMENT 'Prompt content with placeholders',
+    create_time DATETIME,
+    update_time DATETIME
+) COMMENT='Prompt template definition table';

@@ -66,4 +66,13 @@ public interface ITaskJobService {
      * @param jobId job id
      */
     void runOnce(Long jobId);
+
+    /**
+     * Count all jobs in the system.
+     *
+     * Implementation detail is up to the service layer:
+     * for example, you can count records in the job table,
+     * optionally excluding logically deleted ones.
+     */
+    int countAllJobs();
 }
