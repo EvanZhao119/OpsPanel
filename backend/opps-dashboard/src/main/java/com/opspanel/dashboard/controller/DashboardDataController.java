@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * Controller for dashboard widget data queries.
  */
 @RestController
-@RequestMapping("/dashboard/data")
+@RequestMapping("/api/dashboard/data")
 public class DashboardDataController {
 
     @Autowired

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * Controller for AI insight chat.
  */
 @RestController
-@RequestMapping("/insight/chat")
+@RequestMapping("/api/insight/chat")
 public class InsightChatController {
 
     @Autowired

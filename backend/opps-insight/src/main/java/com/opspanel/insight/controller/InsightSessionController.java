@@ -12,7 +12,7 @@ import java.util.List;
  * Controller for managing AI insight chat sessions.
  */
 @RestController
-@RequestMapping("/insight/session")
+@RequestMapping("/api/insight/session")
 public class InsightSessionController {
 
     @Autowired

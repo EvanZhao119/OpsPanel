@@ -12,7 +12,7 @@ import java.util.List;
  * Controller for dashboard widget management.
  */
 @RestController
-@RequestMapping("/dashboard/widget")
+@RequestMapping("/api/dashboard/widget")
 public class DashboardWidgetController {
 
     @Autowired

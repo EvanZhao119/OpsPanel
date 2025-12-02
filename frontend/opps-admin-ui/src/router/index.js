@@ -14,6 +14,8 @@ import DeptPage from '@/views/system/dept/DeptPage.vue'
 import UserRolePage from '@/views/system/userRole/UserRolePage.vue'
 import RoleMenuPage from '@/views/system/roleMenu/RoleMenuPage.vue'
 import LogPage from '@/views/system/log/LogPage.vue'
+import TaskJobPage from '@/views/task/TaskJobPage.vue'
+
 
 const routes = [
   {
@@ -41,7 +43,8 @@ const routes = [
       { path: 'dept', name: 'Dept', component: DeptPage },
       { path: 'userRole', name: 'UserRole', component: UserRolePage },
       { path: 'roleMenu', name: 'RoleMenu', component: RoleMenuPage },
-      { path: 'log', name: 'Log', component: LogPage }
+      { path: 'log', name: 'Log', component: LogPage },
+      { path: 'task', name: 'Task', component: TaskJobPage }
     ]
   }
 ]

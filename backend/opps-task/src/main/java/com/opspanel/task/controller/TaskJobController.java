@@ -13,7 +13,7 @@ import java.util.List;
  * REST controller for managing scheduled jobs.
  */
 @RestController
-@RequestMapping("/task/job")
+@RequestMapping("/api/task/job")
 @RequiredArgsConstructor
 public class TaskJobController {
 

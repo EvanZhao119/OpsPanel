@@ -12,7 +12,7 @@ import java.util.List;
  * Controller for dashboard page management.
  */
 @RestController
-@RequestMapping("/dashboard/page")
+@RequestMapping("/api/dashboard/page")
 public class DashboardPageController {
 
     @Autowired

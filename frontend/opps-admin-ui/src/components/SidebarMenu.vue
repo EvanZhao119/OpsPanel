@@ -27,6 +27,7 @@ const menuList = ref([
   { name: 'Department', path: '/system/dept' },
   { name: 'User-Role Mapping', path: '/system/userRole' },
   { name: 'Role-Menu Mapping', path: '/system/roleMenu' },
+  { name: 'Task Management', path: '/system/task' },
   { name: 'Log Center', path: '/system/log' }
 ])
 

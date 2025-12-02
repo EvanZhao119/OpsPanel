@@ -12,7 +12,7 @@ import java.util.List;
  * Controller for user dashboard favorites (homepage settings).
  */
 @RestController
-@RequestMapping("/dashboard/favorite")
+@RequestMapping("/api/dashboard/favorite")
 public class DashboardFavoriteController {
 
     @Autowired
