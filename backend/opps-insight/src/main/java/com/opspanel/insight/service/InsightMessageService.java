@@ -11,5 +11,11 @@ public interface InsightMessageService extends IService<InsightMessage> {
 
     InsightMessage saveAssistantMessage(Long sessionId, String content);
 
-    List<InsightMessage> listBySession(Long sessionId);
+    /**
+     * List all messages of a session in chronological order.
+     *
+     * @param sessionId session id
+     * @return message list, empty if no record or sessionId is null
+     */
+    List<InsightMessage> listBySessionId(Long sessionId);
 }

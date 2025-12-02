@@ -22,7 +22,7 @@ public class InsightSessionController {
      * Get details of a single session by ID.
      */
     @GetMapping("/{id}")
-    public ApiResponse<InsightSession> get(@PathVariable Long id) {
+    public ApiResponse<InsightSession> get(@PathVariable("id") Long id) {
         InsightSession session = insightSessionService.getById(id);
         return ApiResponse.ok(session);
     }
@@ -42,7 +42,7 @@ public class InsightSessionController {
      * Close a session.
      */
     @PostMapping("/{id}/close")
-    public ApiResponse<Void> close(@PathVariable Long id) {
+    public ApiResponse<Void> close(@PathVariable("id") Long id) {
         InsightSession session = insightSessionService.getById(id);
         if (session == null) {
             return ApiResponse.error("Session not found");

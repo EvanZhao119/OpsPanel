@@ -35,7 +35,7 @@ public class InsightChatServiceImpl implements InsightChatService {
         messageService.saveUserMessage(session.getId(), request.getQuestion());
 
         // 3. Load history
-        List<InsightMessage> history = messageService.listBySession(session.getId());
+        List<InsightMessage> history = messageService.listBySessionId(session.getId());
 
         // 4. Build prompt (can be improved using prompt templates)
         String prompt = buildPrompt(history, request.getContextJson(), request.getQuestion());

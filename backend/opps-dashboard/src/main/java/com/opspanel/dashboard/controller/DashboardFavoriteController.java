@@ -25,7 +25,7 @@ public class DashboardFavoriteController {
      */
     @GetMapping("/list")
     public ApiResponse<List<DashboardFavorite>> listByUser() {
-        Long userId = AuthContextUtils.getUserId(); // TODO: get from security context
+        Long userId = AuthContextUtils.getUserId();
         List<DashboardFavorite> list = dashboardFavoriteService.listByUserId(userId);
         return ApiResponse.ok(list);
     }
@@ -35,7 +35,7 @@ public class DashboardFavoriteController {
      */
     @PostMapping("/add/{pageId}")
     public ApiResponse<Boolean> addFavorite(@PathVariable("id") Long pageId) {
-        Long userId = 0L; // TODO: get from security context
+        Long userId = AuthContextUtils.getUserId();
 
         DashboardFavorite favorite = new DashboardFavorite();
         favorite.setUserId(userId);
@@ -50,7 +50,7 @@ public class DashboardFavoriteController {
      */
     @PostMapping("/setHome/{pageId}")
     public ApiResponse<Void> setHome(@PathVariable("pageId") Long pageId) {
-        Long userId = 0L; // TODO: get from security context
+        Long userId = AuthContextUtils.getUserId();
         dashboardFavoriteService.setHomePage(userId, pageId);
         return ApiResponse.ok();
     }

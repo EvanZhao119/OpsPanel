@@ -28,7 +28,8 @@ const menuList = ref([
   { name: 'User-Role Mapping', path: '/system/userRole' },
   { name: 'Role-Menu Mapping', path: '/system/roleMenu' },
   { name: 'Task Management', path: '/system/task' },
-  { name: 'Log Center', path: '/system/log' }
+  { name: 'Log Center', path: '/system/log' },
+  { name: 'AI Insight Center', path: '/insight' }
 ])
 
 const navigate = (path) => {

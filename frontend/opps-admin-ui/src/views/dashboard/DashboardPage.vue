@@ -46,130 +46,142 @@
         >
           Refresh
         </el-button>
+
+        <!-- AI Insight toggle button -->
+        <el-button
+          v-if="currentPageId"
+          text
+          class="ml-8"
+          @click="toggleInsight"
+        >
+          <el-icon class="insight-icon">
+            <ChatDotRound />
+          </el-icon>
+          <span class="insight-btn-text">
+            {{ showInsight ? 'Hide Insight' : 'AI Insight' }}
+          </span>
+        </el-button>
       </div>
     </div>
 
-    <!-- ======================= Widgets Area ======================= -->
+    <!-- ======================= Widgets + Insight Layout ======================= -->
     <div v-if="!currentPageId" class="empty-tip">
       No dashboard page found. Please create a dashboard page in backend.
     </div>
 
-    <el-row v-else :gutter="16">
-      <el-col
-        v-for="widget in widgets"
-        :key="widget.id"
-        :xs="24"
-        :sm="12"
-        :md="8"
-        :lg="8"
-        class="mb-16"
-      >
-        <el-card shadow="hover" class="widget-card">
-          <template #header>
-            <div class="widget-header">
-              <div class="widget-title">
-                {{ getWidgetTitle(widget) }}
-                <span class="widget-datasource" v-if="widget.dataSource">
-                  {{ widget.dataSource }}
-                </span>
+    <div v-else class="dashboard-layout">
+      <!-- Left: Dashboard widgets -->
+      <div class="dashboard-main">
+        <el-row :gutter="16">
+          <el-col
+            v-for="widget in widgets"
+            :key="widget.id"
+            :xs="24"
+            :sm="12"
+            :md="8"
+            :lg="8"
+            class="mb-16"
+          >
+            <el-card shadow="hover" class="widget-card">
+              <template #header>
+                <div class="widget-header">
+                  <div class="widget-title">
+                    {{ getWidgetTitle(widget) }}
+                    <span class="widget-datasource" v-if="widget.dataSource">
+                      {{ widget.dataSource }}
+                    </span>
+                  </div>
+                  <el-button
+                    size="small"
+                    text
+                    @click="reloadWidget(widget)"
+                  >
+                    Refresh
+                  </el-button>
+                </div>
+              </template>
+
+              <div class="widget-body">
+                <template v-if="widgetStates[widget.id]?.loading">
+                  <div class="widget-loading">
+                    Loading...
+                  </div>
+                </template>
+
+                <template v-else-if="widgetStates[widget.id]?.error">
+                  <div class="widget-error">
+                    {{ widgetStates[widget.id].error }}
+                  </div>
+                </template>
+
+                <template v-else-if="widgetStates[widget.id]?.data">
+                  <div class="widget-view">
+                    <div
+                      v-if="widgetStates[widget.id].data.value !== undefined &&
+                            widgetStates[widget.id].data.value !== null"
+                      class="stat-block"
+                    >
+                      <div class="stat-value">
+                        {{ widgetStates[widget.id].data.value }}
+                        <span
+                          v-if="widgetStates[widget.id].data.unit"
+                          class="stat-unit"
+                        >
+                          {{ widgetStates[widget.id].data.unit }}
+                        </span>
+                      </div>
+
+                      <div
+                        v-if="widgetStates[widget.id].data.title ||
+                             widgetStates[widget.id].data.subtitle"
+                        class="stat-title"
+                      >
+                        {{ widgetStates[widget.id].data.title || widgetStates[widget.id].data.subtitle }}
+                      </div>
+
+                      <div
+                        v-if="widgetStates[widget.id].data.description"
+                        class="stat-desc"
+                      >
+                        {{ widgetStates[widget.id].data.description }}
+                      </div>
+                    </div>
+                  </div>
+                </template>
+
+                <template v-else>
+                  <div class="widget-empty">No data</div>
+                </template>
               </div>
-              <el-button
-                size="small"
-                text
-                @click="reloadWidget(widget)"
-              >
-                Refresh
-              </el-button>
-            </div>
-          </template>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
 
-          <div class="widget-body">
-            <template v-if="widgetStates[widget.id]?.loading">
-              <div class="widget-loading">
-                Loading...
-              </div>
-            </template>
-
-            <template v-else-if="widgetStates[widget.id]?.error">
-              <div class="widget-error">
-                {{ widgetStates[widget.id].error }}
-              </div>
-            </template>
-            
-            <template v-else-if="widgetStates[widget.id]?.data">
-              <div class="widget-view">
-              <div
-                v-if="widgetStates[widget.id].data.value !== undefined &&
-                      widgetStates[widget.id].data.value !== null"
-                class="stat-block"
-               >
-             <div class="stat-value">
-              {{ widgetStates[widget.id].data.value }}
-              <span
-               v-if="widgetStates[widget.id].data.unit"
-               class="stat-unit"
-              >
-              {{ widgetStates[widget.id].data.unit }}
-              </span>
-            </div>
-
-            <div
-              v-if="widgetStates[widget.id].data.title ||
-               widgetStates[widget.id].data.subtitle"
-              class="stat-title"
-              >
-             {{ widgetStates[widget.id].data.title || widgetStates[widget.id].data.subtitle }}
-            </div>
-
-             <div
-              v-if="widgetStates[widget.id].data.description"
-              class="stat-desc"
-            >
-             {{ widgetStates[widget.id].data.description }}
-             </div>
-              </div>
-             </div>
-            </template>
-
-
-            <template v-else>
-              <div class="widget-empty">No data</div>
-            </template>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+      <!-- Right: AI Insight panel (toggle) -->
+      <div v-if="showInsight" class="dashboard-insight">
+        <InsightChatPanel
+          source-type="DASHBOARD"
+          :source-ref="currentPageId"
+          :context-json="dashboardContext"
+          :show-session-toolbar="true"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-/* ------------------------------------------------------------
- * Dashboard Page (with home star support)
- * ------------------------------------------------------------
- * Back-end controllers used:
- *  - /api/dashboard/page/list
- *  - /api/dashboard/widget/listByPage/{pageId}
- *  - /api/dashboard/data/query
- *  - /api/dashboard/favorite/list
- *  - /api/dashboard/favorite/setHome/{pageId}
- * ------------------------------------------------------------ */
-
 import { ref, reactive, onMounted, defineComponent, computed } from 'vue'
 import { ElMessage } from 'element-plus'
+import { ChatDotRound } from '@element-plus/icons-vue'
 
 import { listDashboardPages } from '@/api/dashboard/page'
 import { listFavorites, setHomePage } from '@/api/dashboard/favorite'
 import { listWidgetsByPage } from '@/api/dashboard/widget'
 import { queryDashboardData } from '@/api/dashboard/data'
+import InsightChatPanel from '@/views/insight/InsightChatPanel.vue'
 
-/* ---------------------- Local component: DashboardWidgetView ---------------------- */
-/**
- * Lightweight renderer for DashboardDataVO.
- * It tries to render:
- *  - "value" + "unit" as big number
- *  - "rows" as table (if present)
- *  - "series" as JSON preview (fallback)
- */
 const DashboardWidgetView = defineComponent({
   name: 'DashboardWidgetView',
   props: {
@@ -236,20 +248,27 @@ const DashboardWidgetView = defineComponent({
   `
 })
 
-/* ---------------------- State ---------------------- */
 const pages = ref([])
 const currentPageId = ref(null)
 const homePageId = ref(null)
 
 const widgets = ref([])
-/**
- * widgetStates: {
- *   [widgetId]: { loading: boolean, data?: DashboardDataVO, error?: string }
- * }
- */
 const widgetStates = reactive({})
 
-/* ---------------------- Helpers ---------------------- */
+const showInsight = ref(false)
+
+const dashboardContext = computed(() => {
+  return {
+    pageId: currentPageId.value,
+    widgets: widgets.value.map(w => ({
+      id: w.id,
+      title: w.title || w.widgetTitle || w.name || `Widget #${w.id}`,
+      dataSource: w.dataSource || w.dataSourceCode
+    })),
+    data: widgetStates
+  }
+})
+
 function getWidgetTitle(widget) {
   return (
     widget.title ||
@@ -259,25 +278,20 @@ function getWidgetTitle(widget) {
   )
 }
 
-/* ---------------------- Load pages & home favorites ---------------------- */
 async function loadPagesAndHome() {
-  // 1) Load pages
   const resPages = await listDashboardPages()
   const list = resPages.data || resPages || []
   pages.value = list
 
-  // 2) Load favorites / home
   try {
     const resFav = await listFavorites()
     const favList = resFav.data || resFav || []
     const home = favList.find(f => f.isHome === 1)
     homePageId.value = home ? home.pageId : null
   } catch (e) {
-    // Ignore favorites error, keep basic dashboard working
     console.warn('Failed to load dashboard favorites:', e)
   }
 
-  // 3) Choose current page
   if (homePageId.value) {
     currentPageId.value = homePageId.value
   } else if (pages.value.length) {
@@ -291,7 +305,6 @@ async function loadPagesAndHome() {
   }
 }
 
-/* ---------------------- Load widgets & data ---------------------- */
 async function loadWidgetsForPage(pageId) {
   widgets.value = []
   Object.keys(widgetStates).forEach(key => delete widgetStates[key])
@@ -320,9 +333,6 @@ async function loadWidgetData(widget) {
     const res = await queryDashboardData(payload)
     const api = res?.data ?? res
     const vo = api?.data ?? api
-    console.log('dashboard res:', res)
-    console.log('api:', api)
-    console.log('vo (DashboardDataVO):', vo)
 
     widgetStates[id] = {
       loading: false,
@@ -336,7 +346,6 @@ async function loadWidgetData(widget) {
   }
 }
 
-/* ---------------------- Events ---------------------- */
 async function onPageChange(pageId) {
   if (pageId) {
     await loadWidgetsForPage(pageId)
@@ -354,12 +363,19 @@ async function reloadWidget(widget) {
 
 async function markAsHome() {
   if (!currentPageId.value) return
+  // only skip if homePageId is known and already equal
+  if (homePageId.value != null && currentPageId.value === homePageId.value) {
+    return
+  }
   await setHomePage(currentPageId.value)
   homePageId.value = currentPageId.value
   ElMessage.success('Home dashboard updated')
 }
 
-/* ---------------------- Init ---------------------- */
+function toggleInsight() {
+  showInsight.value = !showInsight.value
+}
+
 onMounted(() => {
   loadPagesAndHome().catch(err => {
     console.error('Failed to load dashboard pages:', err)
@@ -497,5 +513,90 @@ onMounted(() => {
 
 .mt-8 {
   margin-top: 8px;
+}
+
+/* dashboard + insight layout */
+.dashboard-layout {
+  display: flex;
+  align-items: stretch;
+}
+
+.dashboard-main {
+  flex: 1 1 auto;
+  padding-right: 12px;
+}
+
+/* 右侧 AI 面板整体容器 */
+.dashboard-insight {
+  width: 360px;
+  flex: 0 0 360px;
+  padding-left: 12px;
+  padding-top: 4px;
+}
+
+/* --------- 针对 InsightChatPanel 的样式微调（通过 :deep 覆盖） --------- */
+
+/* 根容器占满右侧栏宽度，高度自适应 */
+.dashboard-insight :deep(.insight-panel) {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 头部一行：左右对齐，留出内边距和分隔线 */
+.dashboard-insight :deep(.insight-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* 头部左侧 “AI Insight + 下拉” 对齐 */
+.dashboard-insight :deep(.insight-header-left) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 标题文字稍微紧凑一点 */
+.dashboard-insight :deep(.insight-title) {
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+/* 头部右侧 New / Close */
+.dashboard-insight :deep(.insight-header-right) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+}
+
+/* 聊天主体占据剩余空间，带内边距 */
+.dashboard-insight :deep(.insight-body) {
+  flex: 1 1 auto;
+  padding: 8px 12px;
+  overflow: auto;
+}
+
+/* 底部输入区域与面板同宽 */
+.dashboard-insight :deep(.insight-footer) {
+  padding: 8px 12px 10px 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* AI Insight button */
+.insight-icon {
+  margin-right: 4px;
+}
+
+.insight-btn-text {
+  font-size: 13px;
 }
 </style>

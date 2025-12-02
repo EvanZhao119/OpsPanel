@@ -15,6 +15,7 @@ import UserRolePage from '@/views/system/userRole/UserRolePage.vue'
 import RoleMenuPage from '@/views/system/roleMenu/RoleMenuPage.vue'
 import LogPage from '@/views/system/log/LogPage.vue'
 import TaskJobPage from '@/views/task/TaskJobPage.vue'
+import InsightPage from '@/views/insight/InsightPage.vue'
 
 
 const routes = [
@@ -32,6 +33,11 @@ const routes = [
     name: 'Dashboard',
     component: DashboardPage
   },
+  {
+    path: '/insight',
+    name: 'Insight',
+    component: InsightPage
+  },  
   {
     path: '/system',
     name: 'System',
