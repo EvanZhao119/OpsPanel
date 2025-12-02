@@ -22,7 +22,7 @@ public class DashboardPageController {
      * Get dashboard page by ID.
      */
     @GetMapping("/{id}")
-    public ApiResponse<DashboardPage> get(@PathVariable Long id) {
+    public ApiResponse<DashboardPage> get(@PathVariable("id") Long id) {
         DashboardPage page = dashboardPageService.getById(id);
         return ApiResponse.ok(page);
     }
@@ -62,7 +62,7 @@ public class DashboardPageController {
      * Soft delete a dashboard page.
      */
     @DeleteMapping("/{id}")
-    public ApiResponse<Boolean> delete(@PathVariable Long id) {
+    public ApiResponse<Boolean> delete(@PathVariable("id") Long id) {
         DashboardPage page = dashboardPageService.getById(id);
         if (page == null) {
             return ApiResponse.error("Dashboard page not found");

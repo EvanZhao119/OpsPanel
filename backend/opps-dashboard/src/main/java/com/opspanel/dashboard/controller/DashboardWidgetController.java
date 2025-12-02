@@ -22,7 +22,7 @@ public class DashboardWidgetController {
      * Get widget by ID.
      */
     @GetMapping("/{id}")
-    public ApiResponse<DashboardWidget> get(@PathVariable Long id) {
+    public ApiResponse<DashboardWidget> get(@PathVariable("id") Long id) {
         DashboardWidget widget = dashboardWidgetService.getById(id);
         return ApiResponse.ok(widget);
     }
@@ -31,7 +31,7 @@ public class DashboardWidgetController {
      * List widgets by dashboard page ID.
      */
     @GetMapping("/listByPage/{pageId}")
-    public ApiResponse<List<DashboardWidget>> listByPage(@PathVariable Long pageId) {
+    public ApiResponse<List<DashboardWidget>> listByPage(@PathVariable("pageId") Long pageId) {
         List<DashboardWidget> list = dashboardWidgetService.listByPageId(pageId);
         return ApiResponse.ok(list);
     }
@@ -59,7 +59,7 @@ public class DashboardWidgetController {
      * Soft delete widget.
      */
     @DeleteMapping("/{id}")
-    public ApiResponse<Boolean> delete(@PathVariable Long id) {
+    public ApiResponse<Boolean> delete(@PathVariable("id") Long id) {
         DashboardWidget widget = dashboardWidgetService.getById(id);
         if (widget == null) {
             return ApiResponse.error("Dashboard widget not found");

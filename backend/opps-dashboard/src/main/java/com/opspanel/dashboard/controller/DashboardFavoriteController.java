@@ -3,6 +3,7 @@ package com.opspanel.dashboard.controller;
 import com.opspanel.common.api.ApiResponse;
 import com.opspanel.dashboard.domain.entity.DashboardFavorite;
 import com.opspanel.dashboard.service.DashboardFavoriteService;
+import com.opspanel.framework.util.AuthContextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class DashboardFavoriteController {
      */
     @GetMapping("/list")
     public ApiResponse<List<DashboardFavorite>> listByUser() {
-        Long userId = 0L; // TODO: get from security context
+        Long userId = AuthContextUtils.getUserId(); // TODO: get from security context
         List<DashboardFavorite> list = dashboardFavoriteService.listByUserId(userId);
         return ApiResponse.ok(list);
     }
@@ -33,7 +34,7 @@ public class DashboardFavoriteController {
      * Add a page to favorites for current user.
      */
     @PostMapping("/add/{pageId}")
-    public ApiResponse<Boolean> addFavorite(@PathVariable Long pageId) {
+    public ApiResponse<Boolean> addFavorite(@PathVariable("id") Long pageId) {
         Long userId = 0L; // TODO: get from security context
 
         DashboardFavorite favorite = new DashboardFavorite();
@@ -48,7 +49,7 @@ public class DashboardFavoriteController {
      * Set homepage dashboard for current user.
      */
     @PostMapping("/setHome/{pageId}")
-    public ApiResponse<Void> setHome(@PathVariable Long pageId) {
+    public ApiResponse<Void> setHome(@PathVariable("pageId") Long pageId) {
         Long userId = 0L; // TODO: get from security context
         dashboardFavoriteService.setHomePage(userId, pageId);
         return ApiResponse.ok();

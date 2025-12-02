@@ -36,6 +36,18 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.opspanel</groupId>
+            <artifactId>opps-dashboard</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.opspanel</groupId>
+            <artifactId>opps-insight</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Web + Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
