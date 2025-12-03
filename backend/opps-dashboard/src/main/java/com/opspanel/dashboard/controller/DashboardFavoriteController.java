@@ -21,7 +21,6 @@ public class DashboardFavoriteController {
 
     /**
      * List favorites for current user.
-     * TODO: Replace hard-coded userId with actual current user.
      */
     @GetMapping("/list")
     public ApiResponse<List<DashboardFavorite>> listByUser() {

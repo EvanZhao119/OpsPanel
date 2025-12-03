@@ -27,12 +27,12 @@
         >
           <span
             class="star-icon"
-            :class="{ active: currentPageId === homePageId }"
+            :class="{ active: isHome }"
           >
-            {{ currentPageId === homePageId ? '★' : '☆' }}
+            {{ isHome ? '★' : '☆' }}
           </span>
           <span class="star-text">
-            {{ currentPageId === homePageId ? 'Home Page' : 'Set as Home' }}
+            {{ isHome ? 'Home Page' : 'Set as Home' }}
           </span>
         </el-button>
       </div>
@@ -257,6 +257,10 @@ const widgetStates = reactive({})
 
 const showInsight = ref(false)
 
+const isHome = computed(() => {
+  return currentPageId.value != null && homePageId.value === currentPageId.value
+})
+
 const dashboardContext = computed(() => {
   return {
     pageId: currentPageId.value,
@@ -363,13 +367,21 @@ async function reloadWidget(widget) {
 
 async function markAsHome() {
   if (!currentPageId.value) return
-  // only skip if homePageId is known and already equal
-  if (homePageId.value != null && currentPageId.value === homePageId.value) {
-    return
+
+  try {
+    await setHomePage(currentPageId.value)
+
+    if (homePageId.value === currentPageId.value) {
+      homePageId.value = null
+      ElMessage.success('Home page unset')
+    } else {
+      homePageId.value = currentPageId.value
+      ElMessage.success('Home page updated')
+    }
+  } catch (e) {
+    console.error('Failed to update home dashboard:', e)
+    ElMessage.error('Failed to update home page. Please try again.')
   }
-  await setHomePage(currentPageId.value)
-  homePageId.value = currentPageId.value
-  ElMessage.success('Home dashboard updated')
 }
 
 function toggleInsight() {
@@ -526,7 +538,6 @@ onMounted(() => {
   padding-right: 12px;
 }
 
-/* 右侧 AI 面板整体容器 */
 .dashboard-insight {
   width: 360px;
   flex: 0 0 360px;
@@ -534,9 +545,7 @@ onMounted(() => {
   padding-top: 4px;
 }
 
-/* --------- 针对 InsightChatPanel 的样式微调（通过 :deep 覆盖） --------- */
 
-/* 根容器占满右侧栏宽度，高度自适应 */
 .dashboard-insight :deep(.insight-panel) {
   width: 100%;
   height: 100%;
@@ -547,7 +556,6 @@ onMounted(() => {
   flex-direction: column;
 }
 
-/* 头部一行：左右对齐，留出内边距和分隔线 */
 .dashboard-insight :deep(.insight-header) {
   display: flex;
   align-items: center;
@@ -556,21 +564,18 @@ onMounted(() => {
   border-bottom: 1px solid #e5e7eb;
 }
 
-/* 头部左侧 “AI Insight + 下拉” 对齐 */
 .dashboard-insight :deep(.insight-header-left) {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* 标题文字稍微紧凑一点 */
 .dashboard-insight :deep(.insight-title) {
   font-size: 13px;
   font-weight: 600;
   margin-right: 4px;
 }
 
-/* 头部右侧 New / Close */
 .dashboard-insight :deep(.insight-header-right) {
   display: flex;
   align-items: center;
@@ -578,20 +583,17 @@ onMounted(() => {
   font-size: 12px;
 }
 
-/* 聊天主体占据剩余空间，带内边距 */
 .dashboard-insight :deep(.insight-body) {
   flex: 1 1 auto;
   padding: 8px 12px;
   overflow: auto;
 }
 
-/* 底部输入区域与面板同宽 */
 .dashboard-insight :deep(.insight-footer) {
   padding: 8px 12px 10px 12px;
   border-top: 1px solid #e5e7eb;
 }
 
-/* AI Insight button */
 .insight-icon {
   margin-right: 4px;
 }

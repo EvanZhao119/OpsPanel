@@ -24,13 +24,23 @@ public class DashboardFavoriteServiceImpl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void setHomePage(Long userId, Long pageId) {
-        // Clear existing homepage
+        DashboardFavorite currentHome = lambdaQuery()
+                .eq(DashboardFavorite::getUserId, userId)
+                .eq(DashboardFavorite::getPageId, pageId)
+                .eq(DashboardFavorite::getIsHome, 1)
+                .one();
+
+        if (currentHome != null) {
+            currentHome.setIsHome(0);
+            updateById(currentHome);
+            return;
+        }
+
         lambdaUpdate()
                 .eq(DashboardFavorite::getUserId, userId)
                 .set(DashboardFavorite::getIsHome, 0)
                 .update();
 
-        // Set new homepage record
         DashboardFavorite favorite = lambdaQuery()
                 .eq(DashboardFavorite::getUserId, userId)
                 .eq(DashboardFavorite::getPageId, pageId)
@@ -41,6 +51,7 @@ public class DashboardFavoriteServiceImpl
             favorite.setUserId(userId);
             favorite.setPageId(pageId);
         }
+
         favorite.setIsHome(1);
         saveOrUpdate(favorite);
     }
