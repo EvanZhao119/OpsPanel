@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.opspanel</groupId>
-  <artifactId>opps-parent</artifactId>
+  <artifactId>ops-parent</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>OpsPanel Backend</name>
@@ -19,14 +19,14 @@
   </properties>
 
   <modules>
-    <module>opps-common</module>
-    <module>opps-framework</module>
-    <module>opps-system</module>
-    <module>opps-task</module>
-    <module>opps-dashboard</module>
-    <module>opps-insight</module>
-    <module>opps-api</module>
-    <module>opps-admin</module>
+    <module>ops-common</module>
+    <module>ops-framework</module>
+    <module>ops-system</module>
+    <module>ops-task</module>
+    <module>ops-dashboard</module>
+    <module>ops-insight</module>
+    <module>ops-api</module>
+    <module>ops-admin</module>
   </modules>
 
   <dependencyManagement>

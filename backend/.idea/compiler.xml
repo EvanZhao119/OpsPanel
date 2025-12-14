@@ -7,17 +7,25 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="opps-api" />
-        <module name="opps-task" />
-        <module name="opps-framework" />
-        <module name="opps-insight" />
-        <module name="opps-admin" />
-        <module name="opps-common" />
-        <module name="opps-dashboard" />
-        <module name="opps-system" />
+        <module name="ops-common" />
+        <module name="ops-dashboard" />
+        <module name="ops-api" />
+        <module name="ops-admin" />
+        <module name="ops-framework" />
+        <module name="ops-task" />
+        <module name="ops-insight" />
+        <module name="ops-system" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="opps-admin" target="21" />
+      <module name="opps-api" target="21" />
+      <module name="opps-common" target="21" />
+      <module name="opps-dashboard" target="21" />
+      <module name="opps-framework" target="21" />
+      <module name="opps-insight" target="21" />
+      <module name="opps-system" target="21" />
+      <module name="opps-task" target="21" />
       <module name="src" target="1.5" />
     </bytecodeTargetLevel>
   </component>
