@@ -10,6 +10,8 @@ import com.opspanel.system.dto.user.UserQuery;
 import com.opspanel.system.dto.user.UserUpdateCmd;
 import com.opspanel.system.mapper.SysUserMapper;
 import com.opspanel.system.service.SysUserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -32,9 +34,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
 
     @Override
     public Long create(UserCreateCmd cmd) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         SysUser u = new SysUser();
         u.setUsername(cmd.getUsername());
-        u.setPassword(cmd.getPassword()); // encode in upper layer if needed
+        u.setPassword(encoder.encode(cmd.getPassword()));
         u.setNickName(cmd.getNickName());
         u.setEmail(cmd.getEmail());
         u.setPhone(cmd.getPhone());
