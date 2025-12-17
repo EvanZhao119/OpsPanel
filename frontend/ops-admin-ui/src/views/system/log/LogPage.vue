@@ -118,10 +118,10 @@ const operPageNum = ref(1)
 const operPageSize = ref(10)
 const operQuery = reactive({ username: '', status: null })
 
-const loginListApi = '/api/system/log/login/list'
-const loginRemoveApi = '/api/system/log/login'
-const operListApi = '/api/system/log/oper/list'
-const operRemoveApi = '/api/system/log/oper'
+const loginListApi = '/system/log/login/list'
+const loginRemoveApi = '/system/log/login'
+const operListApi = '/system/log/oper/list'
+const operRemoveApi = '/system/log/oper'
 
 // Login Logs functions
 async function loadLoginLogs() {

@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getWidget(id) {
   return request({
-    url: `/api/dashboard/widget/${id}`,
+    url: `/dashboard/widget/${id}`,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getWidget(id) {
  */
 export function listWidgetsByPage(pageId) {
   return request({
-    url: `/api/dashboard/widget/listByPage/${pageId}`,
+    url: `/dashboard/widget/listByPage/${pageId}`,
     method: 'get'
   })
 }
@@ -30,7 +30,7 @@ export function listWidgetsByPage(pageId) {
  */
 export function createWidget(data) {
   return request({
-    url: '/api/dashboard/widget',
+    url: '/dashboard/widget',
     method: 'post',
     data
   })
@@ -41,7 +41,7 @@ export function createWidget(data) {
  */
 export function updateWidget(data) {
   return request({
-    url: '/api/dashboard/widget',
+    url: '/dashboard/widget',
     method: 'put',
     data
   })
@@ -52,7 +52,7 @@ export function updateWidget(data) {
  */
 export function deleteWidget(id) {
   return request({
-    url: `/api/dashboard/widget/${id}`,
+    url: `/dashboard/widget/${id}`,
     method: 'delete'
   })
 }

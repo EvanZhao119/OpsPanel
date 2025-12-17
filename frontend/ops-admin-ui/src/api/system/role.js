@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function listRoles(params) {
   return request({
-    url: '/api/system/role/list',
+    url: '/system/role/list',
     method: 'get',
     params
   })
@@ -13,14 +13,14 @@ export function listRoles(params) {
 
 export function getRole(id) {
   return request({
-    url: `/api/system/role/${id}`,
+    url: `/system/role/${id}`,
     method: 'get'
   })
 }
 
 export function createRole(data) {
   return request({
-    url: '/api/system/role/create',
+    url: '/system/role/create',
     method: 'post',
     data
   })
@@ -28,7 +28,7 @@ export function createRole(data) {
 
 export function updateRole(data) {
   return request({
-    url: '/api/system/role/update',
+    url: '/system/role/update',
     method: 'post',
     data
   })
@@ -36,7 +36,7 @@ export function updateRole(data) {
 
 export function batchDeleteRole(ids) {
   return request({
-    url: `/api/system/role/batch-delete`,
+    url: `/system/role/batch-delete`,
     method: 'post',
     data: ids
   })

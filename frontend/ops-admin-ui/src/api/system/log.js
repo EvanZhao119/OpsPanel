@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function listLoginLogs(params) {
   return request({
-    url: '/api/system/log/login',
+    url: '/system/log/login',
     method: 'get',
     params
   })
@@ -13,7 +13,7 @@ export function listLoginLogs(params) {
 
 export function listOperationLogs(params) {
   return request({
-    url: '/api/system/log/operation',
+    url: '/system/log/operation',
     method: 'get',
     params
   })
@@ -21,7 +21,7 @@ export function listOperationLogs(params) {
 
 export function deleteLog(id) {
   return request({
-    url: `/api/system/log/${id}`,
+    url: `/system/log/${id}`,
     method: 'delete'
   })
 }

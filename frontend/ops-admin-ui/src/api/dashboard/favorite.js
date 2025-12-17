@@ -11,7 +11,7 @@ import request from '@/utils/request'
  */
 export function listFavorites() {
   return request({
-    url: '/api/dashboard/favorite/list',
+    url: '/dashboard/favorite/list',
     method: 'get'
   })
 }
@@ -23,7 +23,7 @@ export function listFavorites() {
  */
 export function addFavorite(pageId) {
   return request({
-    url: `/api/dashboard/favorite/add/${pageId}`,
+    url: `/dashboard/favorite/add/${pageId}`,
     method: 'post'
   })
 }
@@ -33,7 +33,7 @@ export function addFavorite(pageId) {
  */
 export function setHomePage(pageId) {
   return request({
-    url: `/api/dashboard/favorite/setHome/${pageId}`,
+    url: `/dashboard/favorite/setHome/${pageId}`,
     method: 'post'
   })
 }

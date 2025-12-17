@@ -25,6 +25,7 @@ export default defineConfig(({ mode }) => {
   console.log('------------------------------------------------------------')
 
   return {
+    base: '/opspanel/',
     plugins: [
       vue(),
       vueJsx() 

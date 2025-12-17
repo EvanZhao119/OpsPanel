@@ -13,7 +13,7 @@ import request from '@/utils/request'
  */
 export function queryDashboardData(payload) {
   return request({
-    url: '/api/dashboard/data/query',
+    url: '/dashboard/data/query',
     method: 'post',
     data: payload
   })

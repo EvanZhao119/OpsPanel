@@ -2,9 +2,9 @@
 // -------------------------------------------------
 // API for AI insight chat sessions.
 // Back-end controller:
-//   GET  /api/insight/session/list
-//   GET  /api/insight/session/{id}
-//   POST /api/insight/session/{id}/close
+//   GET  /insight/session/list
+//   GET  /insight/session/{id}
+//   POST /insight/session/{id}/close
 // -------------------------------------------------
 
 import request from '@/utils/request'
@@ -14,7 +14,7 @@ import request from '@/utils/request'
  */
 export function listInsightSessions() {
   return request({
-    url: '/api/insight/session/list',
+    url: '/insight/session/list',
     method: 'get'
   })
 }
@@ -25,7 +25,7 @@ export function listInsightSessions() {
  */
 export function getInsightSession(id) {
   return request({
-    url: `/api/insight/session/${id}`,
+    url: `/insight/session/${id}`,
     method: 'get'
   })
 }
@@ -36,7 +36,7 @@ export function getInsightSession(id) {
  */
 export function closeInsightSession(id) {
   return request({
-    url: `/api/insight/session/${id}/close`,
+    url: `/insight/session/${id}/close`,
     method: 'post'
   })
 }

@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function listRoleMenus(params) {
   return request({
-    url: '/api/system/role-menu',
+    url: '/system/role-menu',
     method: 'get',
     params
   })
@@ -13,7 +13,7 @@ export function listRoleMenus(params) {
 
 export function assignMenus(data) {
   return request({
-    url: '/api/system/role-menu',
+    url: '/system/role-menu',
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function assignMenus(data) {
 
 export function removeRoleMenu(id) {
   return request({
-    url: `/api/system/role-menu/${id}`,
+    url: `/system/role-menu/${id}`,
     method: 'delete'
   })
 }

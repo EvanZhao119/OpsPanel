@@ -2,7 +2,7 @@
 // -----------------------------------------
 // API for insight chat message history.
 // Back-end:
-//   GET /api/insight/message/listBySession/{id}
+//   GET /insight/message/listBySession/{id}
 // -----------------------------------------
 
 import request from '@/utils/request'
@@ -13,7 +13,7 @@ import request from '@/utils/request'
  */
 export function listInsightMessagesBySession(sessionId) {
   return request({
-    url: `/api/insight/message/listBySession/${sessionId}`,
+    url: `/insight/message/listBySession/${sessionId}`,
     method: 'get'
   })
 }

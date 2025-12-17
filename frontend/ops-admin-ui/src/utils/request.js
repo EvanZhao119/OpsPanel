@@ -31,7 +31,8 @@ function onTokenRefreshed(newToken) {
 }
 
 const service = axios.create({
-  baseURL: import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE_URL || ''),
+  // baseURL: import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE_URL || ''),
+  baseURL: '/opspanel/api',
   timeout: 10000
 })
 
@@ -64,7 +65,8 @@ service.interceptors.response.use(
       const refreshToken = getRefreshToken()
       if (!refreshToken) {
         clearTokens()
-        window.location.href = '/login'
+        // window.location.href = '/login'
+        window.location.href = '/opspanel/login'
         return Promise.reject(error)
       }
 
@@ -82,12 +84,18 @@ service.interceptors.response.use(
 
       try {
         /** call refresh endpoint */
-        const refreshRes = await axios.post('/api/auth/refresh', {
-          refreshToken: refreshToken
+        // const refreshRes = await axios.post('/api/auth/refresh', {
+        //   refreshToken: refreshToken
+        // })
+        const refreshRes = await service.post('/auth/refresh', {
+          refreshToken
         })
 
-        const newAccess = refreshRes.data?.accessToken
-        const newRefresh = refreshRes.data?.refreshToken
+        // const newAccess = refreshRes.data?.accessToken
+        // const newRefresh = refreshRes.data?.refreshToken
+
+        const newAccess = refreshRes?.accessToken
+        const newRefresh = refreshRes?.refreshToken
 
         if (!newAccess) throw new Error('Refresh failed')
 
@@ -103,7 +111,8 @@ service.interceptors.response.use(
 
       } catch (e) {
         clearTokens()
-        window.location.href = '/login'
+        // window.location.href = '/login'
+        window.location.href = '/opspanel/login'
         return Promise.reject(e)
 
       } finally {

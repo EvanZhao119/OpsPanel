@@ -5,7 +5,7 @@ import { setTokens } from '@/utils/auth'
 /** Login and save tokens */
 export async function login(data) {
   const res = await request({
-    url: '/api/auth/login',
+    url: '/auth/login',
     method: 'post',
     data
   })
@@ -24,7 +24,7 @@ export async function login(data) {
 /** Fetch current user info */
 export function getUserInfo() {
   return request({
-    url: '/api/auth/me',
+    url: '/auth/me',
     method: 'get'
   })
 }

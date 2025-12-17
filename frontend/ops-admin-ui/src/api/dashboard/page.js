@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function getDashboardPage(id) {
   return request({
-    url: `/api/dashboard/page/${id}`,
+    url: `/dashboard/page/${id}`,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getDashboardPage(id) {
  */
 export function listDashboardPages() {
   return request({
-    url: '/api/dashboard/page/list',
+    url: '/dashboard/page/list',
     method: 'get'
   })
 }
@@ -30,7 +30,7 @@ export function listDashboardPages() {
  */
 export function createDashboardPage(data) {
   return request({
-    url: '/api/dashboard/page',
+    url: '/dashboard/page',
     method: 'post',
     data
   })
@@ -41,7 +41,7 @@ export function createDashboardPage(data) {
  */
 export function updateDashboardPage(data) {
   return request({
-    url: '/api/dashboard/page',
+    url: '/dashboard/page',
     method: 'put',
     data
   })
@@ -52,7 +52,7 @@ export function updateDashboardPage(data) {
  */
 export function deleteDashboardPage(id) {
   return request({
-    url: `/api/dashboard/page/${id}`,
+    url: `/dashboard/page/${id}`,
     method: 'delete'
   })
 }

@@ -2,7 +2,7 @@
 // -----------------------------------------------
 // API for AI insight chat.
 // Back-end controller:
-//   POST /api/insight/chat
+//   POST /insight/chat
 // -----------------------------------------------
 
 import request from '@/utils/request'
@@ -18,7 +18,7 @@ import request from '@/utils/request'
  */
 export function chatInsight(payload) {
   return request({
-    url: '/api/insight/chat',
+    url: '/insight/chat',
     method: 'post',
     data: payload
   })

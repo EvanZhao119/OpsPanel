@@ -31,23 +31,23 @@
   async function loadData() {
     if (!query.userId) return
     // 1) load user role ids
-    const roleIds = await request({ url: '/api/system/user-role/list', method: 'get', params: { userId: query.userId } })
+    const roleIds = await request({ url: '/system/user-role/list', method: 'get', params: { userId: query.userId } })
     checkedRoleIds.value = roleIds || []
   
     // 2) load all roles (first page big size)
-    const res = await request({ url: '/api/system/role/list', method: 'get', params: { pageNum: 1, pageSize: 1000 } })
+    const res = await request({ url: '/system/role/list', method: 'get', params: { pageNum: 1, pageSize: 1000 } })
     allRoles.value = res.records || res.rows || res.data || []
   }
   
   async function save() {
     if (!query.userId) return
-    await request({ url: '/api/system/user-role/assign', method: 'post', data: { userId: query.userId, roleIds: checkedRoleIds.value } })
+    await request({ url: '/system/user-role/assign', method: 'post', data: { userId: query.userId, roleIds: checkedRoleIds.value } })
     ElMessage.success('Saved')
   }
   
   async function removeAll() {
     if (!query.userId) return
-    await request({ url: `/api/system/user-role/${query.userId}`, method: 'delete' })
+    await request({ url: `/system/user-role/${query.userId}`, method: 'delete' })
     checkedRoleIds.value = []
     ElMessage.success('Removed')
   }

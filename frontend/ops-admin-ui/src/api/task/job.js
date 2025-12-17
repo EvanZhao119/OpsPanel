@@ -10,7 +10,7 @@ import request from '@/utils/request'
  */
 export function listJobs(params) {
   return request({
-    url: '/api/task/job/list',
+    url: '/task/job/list',
     method: 'get',
     params
   })
@@ -21,7 +21,7 @@ export function listJobs(params) {
  */
 export function getJob(id) {
   return request({
-    url: `/api/task/job/${id}`,
+    url: `/task/job/${id}`,
     method: 'get'
   })
 }
@@ -31,7 +31,7 @@ export function getJob(id) {
  */
 export function createJob(data) {
   return request({
-    url: '/api/task/job',
+    url: '/task/job',
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function createJob(data) {
  */
 export function updateJob(data) {
   return request({
-    url: '/api/task/job',
+    url: '/task/job',
     method: 'put',
     data
   })
@@ -53,7 +53,7 @@ export function updateJob(data) {
  */
 export function changeStatus(id, status) {
   return request({
-    url: `/api/task/job/${id}/status/${status}`,
+    url: `/task/job/${id}/status/${status}`,
     method: 'put'
   })
 }
@@ -63,7 +63,7 @@ export function changeStatus(id, status) {
  */
 export function runOnce(id) {
   return request({
-    url: `/api/task/job/${id}/runOnce`,
+    url: `/task/job/${id}/runOnce`,
     method: 'post'
   })
 }
@@ -73,7 +73,7 @@ export function runOnce(id) {
  */
 export function deleteJobs(ids) {
   return request({
-    url: `/api/task/job/${ids.join(',')}`,
+    url: `/task/job/${ids.join(',')}`,
     method: 'delete'
   })
 }

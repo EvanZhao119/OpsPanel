@@ -37,11 +37,11 @@
   async function loadData() {
     if (!query.roleId) return
     // 1) current checked menu ids
-    const ids = await request({ url: '/api/system/role-menu/list', method:'get', params:{ roleId: query.roleId } })
+    const ids = await request({ url: '/system/role-menu/list', method:'get', params:{ roleId: query.roleId } })
     checkedMenuIds.value = ids || []
   
     // 2) full menu tree
-    const res = await request({ url:'/api/system/menu/list', method:'get' })
+    const res = await request({ url:'/system/menu/list', method:'get' })
     menuTree.value = res.records || res.data || res || []
     // sync default checked after data set
     setTimeout(()=>{ treeRef.value.setCheckedKeys(checkedMenuIds.value) }, 0)
@@ -49,12 +49,12 @@
   
   async function save(){
     const keys = treeRef.value.getCheckedKeys(true) // true: leaf only
-    await request({ url:'/api/system/role-menu/assign', method:'post', data:{ roleId: query.roleId, menuIds: keys } })
+    await request({ url:'/system/role-menu/assign', method:'post', data:{ roleId: query.roleId, menuIds: keys } })
     ElMessage.success('Saved')
   }
   
   async function removeAll(){
-    await request({ url:`/api/system/role-menu/${query.roleId}`, method:'delete' })
+    await request({ url:`/system/role-menu/${query.roleId}`, method:'delete' })
     treeRef.value.setCheckedKeys([])
     ElMessage.success('Removed')
   }
