@@ -1,3 +1,3 @@
 # OpsPanel Architecture
 
-![System Architecture Diagram](./assets/Ops Infrastructure.png)
+![System Architecture Diagram](./assets/Ops_Infrastructure.png)
